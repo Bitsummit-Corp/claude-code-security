@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  BITSUMMIT Hardening - Jamf Configuration Profile (Custom Settings)
+
+  This profile deploys a vetted Claude Code managed-settings.json to managed Macs.
+  The Custom Settings payload writes the embedded plist to:
+    /Library/Application Support/ClaudeCode/managed-settings.json (via post-install script)
+
+  How to populate the payload:
+    1. Compile the chosen profile:
+         ccsec compile --profile regulated --target managed --os macos --out /tmp/m.json
+    2. base64-encode the file:
+         base64 -i /tmp/m.json -o /tmp/m.b64
+    3. Replace the <!-- generated --> placeholder below with the base64 content.
+
+  Alternatively, pair this profile with a Jamf policy that runs install-managed.sh
+  on enrolled machines and skip the Custom Settings payload entirely.
+
+  See installers/macos/jamf/README.md for the full workflow.
+-->
+<plist version="1.0">
+  <dict>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+    <key>PayloadIdentifier</key>
+    <string>com.bitsummit.claude-code-security</string>
+    <key>PayloadUUID</key>
+    <string>00000000-0000-0000-0000-000000000001</string>
+    <key>PayloadDisplayName</key>
+    <string>BITSUMMIT Hardening - Claude Code Managed Settings</string>
+    <key>PayloadDescription</key>
+    <string>Deploys vetted Claude Code managed-settings.json to /Library/Application Support/ClaudeCode/.</string>
+    <key>PayloadOrganization</key>
+    <string>BITSUMMIT</string>
+    <key>PayloadScope</key>
+    <string>System</string>
+    <key>PayloadContent</key>
+    <array>
+      <dict>
+        <key>PayloadType</key>
+        <string>com.apple.ManagedClient.preferences</string>
+        <key>PayloadVersion</key>
+        <integer>1</integer>
+        <key>PayloadIdentifier</key>
+        <string>com.bitsummit.claude-code-security.settings</string>
+        <key>PayloadUUID</key>
+        <string>00000000-0000-0000-0000-000000000002</string>
+        <key>PayloadDisplayName</key>
+        <string>Claude Code Managed Settings Payload</string>
+        <key>PayloadEnabled</key>
+        <true/>
+        <key>PayloadContent</key>
+        <dict>
+          <key>com.anthropic.claude-code</key>
+          <dict>
+            <key>Forced</key>
+            <array>
+              <dict>
+                <key>mcx_preference_settings</key>
+                <dict>
+                  <key>managed_settings_base64</key>
+                  <string><!-- generated --></string>
+                  <key>target_path</key>
+                  <string>/Library/Application Support/ClaudeCode/managed-settings.json</string>
+                  <key>profile</key>
+                  <string>regulated</string>
+                  <key>installer_script</key>
+                  <string>/usr/local/bitsummit/install-managed.sh</string>
+                </dict>
+              </dict>
+            </array>
+          </dict>
+        </dict>
+      </dict>
+    </array>
+  </dict>
+</plist>

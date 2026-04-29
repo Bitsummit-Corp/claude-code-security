@@ -4,6 +4,28 @@ All notable changes to this project will be documented here. Format follows [Kee
 
 ## [Unreleased]
 
+## [0.9.0-rc.2] - 2026-04-29
+
+This is a **release candidate**. Plans 1-9 of 10 are shipped; Plan 10 (pilot validation) is user-action and gates `v1.0.0`.
+
+### Added
+- `docs/pilot-validation.md`: canonical pilot runbook covering candidate clients (a regulated municipal agency, a regional law-enforcement service, a federally-regulated research organization), pilot criteria, four-phase rollout (kickoff / rollout / hardening / signoff), v1.0.0 readiness checklist, friction-log template inline, and internal incident drill template inline.
+- `docs/external-security-review-rfp.md`: Request-for-Proposal template the maintainer sends to security firms (Trail of Bits, NCC Group, Doyensec, Cure53, Atredis, Include Security). Includes scope (in / out), deliverables, timeline, budget guidance, and a 10-question engagement Q&A template.
+- `docs/pilot-templates/agreement.md`: pilot agreement template with explicit `[FILL]` markers and counsel-disclaimer.
+- `docs/pilot-templates/friction-log.md`: running friction-log template with severity definitions (P0 / P1 / P2), status values, weekly check-in summaries, and v1.0.0 aggregate gating logic.
+- `docs/pilot-templates/incident-drill.md`: five-drill simulated bypass-attempt template (T-001 secret leak, T-005 destructive FS, T-007 egress, T-008 pipe-to-shell, T-014 MDM bypass) with pass criteria and post-drill checklist.
+- `docs/pilot-templates/final-report.md`: pilot signoff template with phase completion table, friction summary, drill results, audit log integrity attestation, recommendations to maintainer, and signature block.
+- `docs/v1.0.0-readiness.md`: single-page summary of remaining user-action items before `v1.0.0`. Lists required items (pilot signoff, security review, PGP key, npm token, Apple cert, CHANGELOG entry, plugin marketplace listing) and optional items (Windows EV cert, OpenSSF Scorecard, public case study).
+- `docs/superpowers/specs/2026-04-29-plan10-pilot-validation.md` and `docs/superpowers/plans/2026-04-29-phase1-plan10-pilot-validation.md`.
+
+### Changed
+- `README.md`: status banner updated to reflect Plans 1-9 shipped and Plan 10 as user-action; added "v1.0.0 path" section near the top linking the three pilot / review / readiness docs; version badge bumped to `0.9.0-rc.2`; OpenSSF Scorecard placeholder updated to "pending v1.0.0".
+
+### Notes
+- 313 tests passing (unchanged from `v0.9.0-rc.1`; Plan 10 ships docs only, not code).
+- `v1.0.0` is **not** tagged in this release. `v1.0.0` is the maintainer's call after pilot signoff and external security review report are filed.
+- Plan 10 is the final plan in Phase 1 of the project. All Plan 1-9 deliverables are shipped; the project is feature-complete and infrastructure-complete.
+
 ## [0.9.0-rc.1] - 2026-04-29
 
 This is a **release candidate**. Only Plan 10 (pilot validation) remains before `v1.0.0`.

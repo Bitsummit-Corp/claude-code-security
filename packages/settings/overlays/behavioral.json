@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "deny": [],
+    "allow": []
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      { "name": "behavioral-rule-enforcer" }
+    ],
+    "SessionStart": [
+      { "name": "claude-md-validator" }
+    ],
+    "PostToolUse": [
+      { "name": "untrusted-content-tagger" }
+    ]
+  }
+}

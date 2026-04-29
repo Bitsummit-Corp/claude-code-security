@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "deny": [],
+    "allow": []
+  },
+  "hooks": {
+    "SubagentStart": [
+      { "name": "subagent-spawn-guard" },
+      { "name": "agent-allowlist-enforcer" }
+    ],
+    "PreToolUse": [
+      { "name": "task-tool-input-guard" }
+    ]
+  }
+}

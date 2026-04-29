@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "deny": [],
+    "allow": []
+  },
+  "hooks": {
+    "SessionStart": [
+      { "name": "disable-all-hooks-detector" },
+      { "name": "local-settings-precedence-checker" }
+    ]
+  }
+}

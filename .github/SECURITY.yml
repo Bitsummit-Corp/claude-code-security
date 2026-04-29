@@ -1,0 +1,15 @@
+# Configures GitHub Security Advisory defaults for this repo.
+# When a private security advisory is created via the Security tab, these defaults apply.
+#
+# This file is intentionally minimal. The substantive policy lives in /SECURITY.md
+# and the procedural runbook lives in /docs/release-engineering.md.
+
+policy: SECURITY.md
+template: .github/security-advisory-template.md
+
+# Default reviewers for new advisories. The maintainer routes from here.
+default_reviewers:
+  - bit-haseebminhas
+
+# Default severity scoring system.
+severity_scoring: cvss_4_0

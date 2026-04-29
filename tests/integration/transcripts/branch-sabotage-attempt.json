@@ -1,0 +1,15 @@
+{
+  "name": "branch-sabotage-attempt",
+  "events": [
+    { "tool": "Bash", "event": "PreToolUse", "input": { "command": "git commit --no-verify -m \"x\"" } },
+    { "tool": "Bash", "event": "PreToolUse", "input": { "command": "git push origin main" } },
+    { "tool": "Bash", "event": "PreToolUse", "input": { "command": "git commit --amend -m \"y\"" } },
+    { "tool": "Bash", "event": "PreToolUse", "input": { "command": "git push origin feature/x" } }
+  ],
+  "expected": [
+    { "decision": "warn" },
+    { "decision": "warn" },
+    { "decision": "warn" },
+    { "decision": "allow" }
+  ]
+}

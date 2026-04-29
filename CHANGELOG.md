@@ -4,6 +4,24 @@ All notable changes to this project will be documented here. Format follows [Kee
 
 ## [Unreleased]
 
+## [0.4.0-alpha.0] - 2026-04-29
+
+### Added
+- 4 new hooks: `webfetch-egress-guard`, `bash-egress-guard`, `audit-tamper-detector`, `audit-session-summary`.
+- New overlays: `overlays/network-egress.json` and `overlays/audit.json`.
+- Integration transcripts: webfetch-exfil-attempt, bash-egress-attempt, audit-tamper-attempt.
+- Threat model entries: T-005 fully covered, T-014 Tool Spoofing via MCP (partial), T-015 Audit Log Tampering, T-016 Hook DoS, T-017 Repudiation of Risky Action.
+
+### Changed
+- `AuditLogger.write()` serializes concurrent in-process writes via internal promise queue; closes the race noted in Plan 1 review.
+- `AuditLogger.verify()` returns `{ ok: true, records: 0 }` on missing file (was throwing) and `{ ok: false, brokenAt: i }` on JSON-parse failure (was throwing).
+- All 3 profiles extend the network-egress and audit overlays.
+
+### Notes
+- Cross-process audit log safety still tracked for a future plan (per-PID files or flock).
+- Strict / regulated profile differentiation still tracked for Plan 5.
+- Plugin / npm distribution still tracked for Plan 6.
+
 ## [0.3.0-alpha.0] - 2026-04-29
 
 ### Added

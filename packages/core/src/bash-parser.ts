@@ -6,7 +6,8 @@ export type StructuralRiskKind =
   | 'command_substitution'
   | 'process_substitution'
   | 'leading_cd'
-  | 'unicode_lookalike';
+  | 'unicode_lookalike'
+  | 'background_operator';
 
 export interface StructuralRisk {
   kind: StructuralRiskKind;
@@ -14,8 +15,11 @@ export interface StructuralRisk {
   excerpt: string;
 }
 
-const UNICODE_LOOKALIKES = new Set(['；', '＆']);
+const UNICODE_LOOKALIKES = new Set(['；', '＆', '｜', '＄']);
 
+// Note: maskQuotedRegions does not honor `\` escape sequences inside double-quoted
+// strings. The conservative tradeoff is over-flagging on malformed quotes (which
+// is safer than under-flagging risky shell metacharacters).
 function maskQuotedRegions(cmd: string): string {
   const out: string[] = [];
   let inSingle = false;
@@ -59,6 +63,7 @@ export function detectStructuralRisks(cmd: string): StructuralRisk[] {
   scan(/\$\([^)]*\)/g, 'command_substitution');
   scan(/`[^`]*`/g, 'command_substitution');
   scan(/[<>]\([^)]*\)/g, 'process_substitution');
+  scan(/(?<!&)&(?!&)/g, 'background_operator');
 
   if (/^\s*cd\s+\S+/.test(cmd)) {
     risks.push({ kind: 'leading_cd', offset: 0, excerpt: cmd.split(/\s+/).slice(0, 2).join(' ') });

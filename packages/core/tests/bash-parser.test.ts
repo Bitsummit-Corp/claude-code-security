@@ -36,4 +36,21 @@ describe('detectStructuralRisks', () => {
   it('catches Unicode lookalike semicolon', () => {
     expect(detectStructuralRisks('echo a；rm b').map(r => r.kind)).toContain('unicode_lookalike');
   });
+  it("flags fullwidth pipe U+FF5C as unicode_lookalike", () => {
+    expect(detectStructuralRisks('echo a｜sh').map(r => r.kind)).toContain('unicode_lookalike');
+  });
+  it("flags fullwidth dollar U+FF04 as unicode_lookalike", () => {
+    expect(detectStructuralRisks('echo ＄(whoami)').map(r => r.kind)).toContain('unicode_lookalike');
+  });
+  it('flags & background operator', () => {
+    expect(detectStructuralRisks('long-running-cmd &').map(r => r.kind)).toContain('background_operator');
+  });
+  it('does NOT flag && as background_operator', () => {
+    const risks = detectStructuralRisks('a && b');
+    expect(risks.map(r => r.kind)).not.toContain('background_operator');
+    expect(risks.map(r => r.kind)).toContain('chained_and');
+  });
+  it('does NOT flag & inside single quotes', () => {
+    expect(detectStructuralRisks("echo 'a & b'")).toEqual([]);
+  });
 });

@@ -84,6 +84,38 @@
       {
         "pattern": "Read(/etc/sudoers.d/**)",
         "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Bash(curl * | sh)",
+        "threat": "T-006-pipe-to-shell"
+      },
+      {
+        "pattern": "Bash(curl * | bash)",
+        "threat": "T-006-pipe-to-shell"
+      },
+      {
+        "pattern": "Bash(wget * | sh)",
+        "threat": "T-006-pipe-to-shell"
+      },
+      {
+        "pattern": "Bash(wget * | bash)",
+        "threat": "T-006-pipe-to-shell"
+      },
+      {
+        "pattern": "Bash(git filter-branch *)",
+        "threat": "T-008-history-rewrite"
+      },
+      {
+        "pattern": "Bash(git filter-repo *)",
+        "threat": "T-008-history-rewrite"
+      },
+      {
+        "pattern": "Edit(*.gitmodules)",
+        "threat": "T-005-supply-chain-submodule"
+      },
+      {
+        "pattern": "Write(*.gitmodules)",
+        "threat": "T-005-supply-chain-submodule"
       }
     ],
     "allow": []
@@ -110,6 +142,24 @@
       },
       {
         "name": "dotfile-guard"
+      },
+      {
+        "name": "bash-structural-guard"
+      },
+      {
+        "name": "pipe-to-shell-guard"
+      },
+      {
+        "name": "branch-protection-guard"
+      },
+      {
+        "name": "commit-amend-pushed-guard"
+      },
+      {
+        "name": "submodule-injection-guard"
+      },
+      {
+        "name": "git-history-rewrite-guard"
       }
     ],
     "PostToolUse": [

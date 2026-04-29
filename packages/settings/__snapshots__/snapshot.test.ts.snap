@@ -27,6 +27,66 @@ exports[`settings/compiled snapshots > baseline.json matches checked-in snapshot
       {
         "pattern": "Read(/Users/x/.gnupg/**)",
         "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Bash(rm -rf /)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(rm -rf /*)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(rm -rf /Users/x)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(rm -rf ~)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(mkfs *)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(dd * of=/dev/*)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(shred -u *)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(git push --force *)",
+        "threat": "T-004-branch-sabotage"
+      },
+      {
+        "pattern": "Bash(git push -f *)",
+        "threat": "T-004-branch-sabotage"
+      },
+      {
+        "pattern": "Read(/Users/x/.kube/**)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.docker/config.json)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.netrc)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.config/gh/hosts.yml)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/etc/sudoers)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/etc/sudoers.d/**)",
+        "threat": "T-003-credential-exfil"
       }
     ],
     "allow": []
@@ -35,9 +95,295 @@ exports[`settings/compiled snapshots > baseline.json matches checked-in snapshot
     "PreToolUse": [
       {
         "name": "secret-guard"
+      },
+      {
+        "name": "keychain-guard"
+      },
+      {
+        "name": "mcp-secret-guard"
+      },
+      {
+        "name": "destructive-fs-guard"
+      },
+      {
+        "name": "git-destructive-guard"
+      },
+      {
+        "name": "sensitive-paths-guard"
+      },
+      {
+        "name": "dotfile-guard"
       }
     ],
-    "PostToolUse": [],
+    "PostToolUse": [
+      {
+        "name": "secret-leak-detector"
+      }
+    ],
+    "UserPromptSubmit": [],
+    "SessionStart": []
+  },
+  "schema": 1,
+  "ccsec_version": "0.1.0-alpha.0",
+  "audit": {
+    "log_path": "\${HOME}/.claude/ccsec-audit.jsonl"
+  }
+}
+"
+`;
+
+exports[`settings/compiled snapshots > regulated.json matches checked-in snapshot 1`] = `
+"{
+  "permissions": {
+    "deny": [
+      {
+        "pattern": "Bash(printenv *)",
+        "threat": "T-001-secret-leak"
+      },
+      {
+        "pattern": "Bash(env)",
+        "threat": "T-001-secret-leak"
+      },
+      {
+        "pattern": "Bash(security find-generic-password *)",
+        "threat": "T-001-secret-leak"
+      },
+      {
+        "pattern": "Read(/Users/x/.ssh/**)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.aws/credentials)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.gnupg/**)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Bash(rm -rf /)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(rm -rf /*)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(rm -rf /Users/x)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(rm -rf ~)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(mkfs *)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(dd * of=/dev/*)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(shred -u *)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(git push --force *)",
+        "threat": "T-004-branch-sabotage"
+      },
+      {
+        "pattern": "Bash(git push -f *)",
+        "threat": "T-004-branch-sabotage"
+      },
+      {
+        "pattern": "Read(/Users/x/.kube/**)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.docker/config.json)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.netrc)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.config/gh/hosts.yml)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/etc/sudoers)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/etc/sudoers.d/**)",
+        "threat": "T-003-credential-exfil"
+      }
+    ],
+    "allow": []
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "name": "secret-guard"
+      },
+      {
+        "name": "keychain-guard"
+      },
+      {
+        "name": "mcp-secret-guard"
+      },
+      {
+        "name": "destructive-fs-guard"
+      },
+      {
+        "name": "git-destructive-guard"
+      },
+      {
+        "name": "sensitive-paths-guard"
+      },
+      {
+        "name": "dotfile-guard"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "name": "secret-leak-detector"
+      }
+    ],
+    "UserPromptSubmit": [],
+    "SessionStart": []
+  },
+  "schema": 1,
+  "ccsec_version": "0.1.0-alpha.0",
+  "audit": {
+    "log_path": "\${HOME}/.claude/ccsec-audit.jsonl"
+  }
+}
+"
+`;
+
+exports[`settings/compiled snapshots > strict.json matches checked-in snapshot 1`] = `
+"{
+  "permissions": {
+    "deny": [
+      {
+        "pattern": "Bash(printenv *)",
+        "threat": "T-001-secret-leak"
+      },
+      {
+        "pattern": "Bash(env)",
+        "threat": "T-001-secret-leak"
+      },
+      {
+        "pattern": "Bash(security find-generic-password *)",
+        "threat": "T-001-secret-leak"
+      },
+      {
+        "pattern": "Read(/Users/x/.ssh/**)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.aws/credentials)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.gnupg/**)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Bash(rm -rf /)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(rm -rf /*)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(rm -rf /Users/x)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(rm -rf ~)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(mkfs *)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(dd * of=/dev/*)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(shred -u *)",
+        "threat": "T-002-destructive-fs"
+      },
+      {
+        "pattern": "Bash(git push --force *)",
+        "threat": "T-004-branch-sabotage"
+      },
+      {
+        "pattern": "Bash(git push -f *)",
+        "threat": "T-004-branch-sabotage"
+      },
+      {
+        "pattern": "Read(/Users/x/.kube/**)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.docker/config.json)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.netrc)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/Users/x/.config/gh/hosts.yml)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/etc/sudoers)",
+        "threat": "T-003-credential-exfil"
+      },
+      {
+        "pattern": "Read(/etc/sudoers.d/**)",
+        "threat": "T-003-credential-exfil"
+      }
+    ],
+    "allow": []
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "name": "secret-guard"
+      },
+      {
+        "name": "keychain-guard"
+      },
+      {
+        "name": "mcp-secret-guard"
+      },
+      {
+        "name": "destructive-fs-guard"
+      },
+      {
+        "name": "git-destructive-guard"
+      },
+      {
+        "name": "sensitive-paths-guard"
+      },
+      {
+        "name": "dotfile-guard"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "name": "secret-leak-detector"
+      }
+    ],
     "UserPromptSubmit": [],
     "SessionStart": []
   },

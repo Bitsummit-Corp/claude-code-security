@@ -47,4 +47,28 @@ describe('compileProfile', () => {
     const out = await compileProfile({ settingsRoot: root, profile: 'baseline', os: 'macos' });
     expect(out.permissions.allow).toContain('Bash(ls *)');
   });
+  it('propagates audit from extends overlays', async () => {
+    await writeFile(join(root, 'overlays', 'audit.json'), JSON.stringify({
+      audit: { egress_allowlist: ['github.com', 'pypi.org'] },
+      hooks: {},
+    }));
+    await writeFile(join(root, 'profiles', 'baseline.json'), JSON.stringify({
+      extends: ['base', 'overlays/audit'],
+      overrides: {},
+    }));
+    const out = await compileProfile({ settingsRoot: root, profile: 'baseline', os: 'macos' });
+    expect(out.audit).toEqual({ egress_allowlist: ['github.com', 'pypi.org'] });
+  });
+  it('overrides.audit REPLACES audit value from extends', async () => {
+    await writeFile(join(root, 'overlays', 'audit.json'), JSON.stringify({
+      audit: { egress_allowlist: ['a.example', 'b.example', 'c.example'] },
+      hooks: {},
+    }));
+    await writeFile(join(root, 'profiles', 'strict.json'), JSON.stringify({
+      extends: ['base', 'overlays/audit'],
+      overrides: { audit: { egress_allowlist: ['a.example'] } },
+    }));
+    const out = await compileProfile({ settingsRoot: root, profile: 'strict', os: 'macos' });
+    expect(out.audit).toEqual({ egress_allowlist: ['a.example'] });
+  });
 });

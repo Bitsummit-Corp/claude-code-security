@@ -43,6 +43,16 @@ function mergeFragments(target: SettingsFragment, source: SettingsFragment): voi
   }
 }
 
+// Recursively replace top-level keys that overrides explicitly sets.
+// Used after extends-merge so a profile's overrides.audit can REPLACE
+// the merged value coming from extends fragments.
+function replaceTopLevelFromOverrides(target: SettingsFragment, overrides: SettingsFragment): void {
+  for (const k of Object.keys(overrides)) {
+    if (k === 'permissions' || k === 'hooks') continue;
+    target[k] = overrides[k];
+  }
+}
+
 export async function compileProfile(opts: CompileOptions): Promise<SettingsFragment> {
   const profilePath = join(opts.settingsRoot, 'profiles', `${opts.profile}.json`);
   let profile: ProfileFile;
@@ -54,7 +64,17 @@ export async function compileProfile(opts: CompileOptions): Promise<SettingsFrag
     const frag = await readJson<SettingsFragment>(join(opts.settingsRoot, `${ref}.json`));
     mergeFragments(merged, frag);
   }
-  if (profile.overrides) mergeFragments(merged, profile.overrides as SettingsFragment);
+  if (profile.overrides) {
+    const overrides = profile.overrides as SettingsFragment;
+    // permissions and hooks accumulate (defense-in-depth): a profile can add
+    // additional denies / hook references on top of extends fragments.
+    mergeFragments(merged, overrides);
+    // Other top-level keys (audit, schema, etc.) REPLACE: the profile's
+    // override is the final authoritative value for that key. This lets
+    // strict and regulated tighten audit.egress_allowlist past what the
+    // network-egress overlay defines.
+    replaceTopLevelFromOverrides(merged, overrides);
+  }
 
   const env = opts.env ?? (process.env as Record<string, string>);
   if (merged.permissions?.deny) {

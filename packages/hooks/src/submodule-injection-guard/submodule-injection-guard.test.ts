@@ -20,9 +20,9 @@ const editCtx = (file_path: string, tool: 'Edit' | 'Write' = 'Edit') => ({
 });
 
 describe('submodule-injection-guard', () => {
-  it('manifest declares scalar block severity, T-005, multi-tool matchers', () => {
+  it('manifest declares scalar block severity, T-018, multi-tool matchers', () => {
     expect(guard.manifest.severity).toBe('block');
-    expect(guard.manifest.threat).toBe('T-013-supply-chain-submodule');
+    expect(guard.manifest.threat).toBe('T-018-supply-chain-submodule');
     expect(guard.manifest.event).toBe('PreToolUse');
     expect(guard.manifest.matchers).toEqual(['Edit', 'Write', 'Bash']);
     expect(guard.manifest.profiles).toEqual(['baseline', 'strict', 'regulated']);

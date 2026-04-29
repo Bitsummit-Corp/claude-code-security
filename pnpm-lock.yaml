@@ -64,6 +64,8 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  packages/rules: {}
+
   packages/settings: {}
 
   tests/integration:

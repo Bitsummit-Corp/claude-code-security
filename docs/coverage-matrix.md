@@ -1,6 +1,6 @@
 # Coverage Matrix
 
-> Hand-maintained for Plans 1-4. Auto-generation from hook manifests lands in Plan 8.
+> Hand-maintained for Plans 1-5. Auto-generation from hook manifests lands in Plan 8.
 
 | Threat | Hooks | Profiles |
 |---|---|---|
@@ -13,25 +13,32 @@
 | T-007 Command Chaining Bypass | bash-structural-guard (audit-only; chained_and/or/semicolon and leading_cd allowed by default) | baseline, strict, regulated (audit-only across profiles) |
 | T-008 Git History Rewrite | git-history-rewrite-guard | baseline, strict, regulated |
 | T-009 Arbitrary Code via eval / Command Substitution | bash-structural-guard | baseline (warn), strict (block), regulated (block) |
-| T-013 Supply Chain via Submodule | submodule-injection-guard | baseline, strict, regulated |
+| T-010 Prompt Injection from Tool Output | behavioral-rule-enforcer, untrusted-content-tagger, claude-md-validator | baseline (claude-md=warn, others=log), strict (claude-md=block, others=log), regulated (claude-md=block, others=log) |
+| T-011 Subagent Escape | subagent-spawn-guard, task-tool-input-guard, agent-allowlist-enforcer | baseline (task-input=block, spawn=warn, allowlist=log), strict (spawn=block, allowlist=log), regulated (allowlist=block) |
+| T-012 MDM Bypass via disableAllHooks | disable-all-hooks-detector | baseline, strict, regulated (passive warn across profiles per ADR-0003) |
+| T-013 Local Settings Overriding Managed | local-settings-precedence-checker | baseline (warn), strict (warn), regulated (block) |
 | T-014 Tool Spoofing via MCP | mcp-secret-guard (partial; payload scan only) | baseline, strict, regulated (partial) |
 | T-015 Audit Log Tampering | audit-tamper-detector + AuditLogger sha256 hash chain | baseline (warn), strict (block), regulated (block) |
 | T-016 Hook DoS / Runaway Timeout | runner timeout enforcement (Plan 1) | baseline, strict, regulated |
 | T-017 Repudiation of Risky Action | audit-session-summary + full audit log | baseline, strict, regulated |
-| T-010 to T-012, T-018 | (not yet covered) | (Plan 5) |
+| T-018 Supply Chain via Submodule (was T-013) | submodule-injection-guard | baseline, strict, regulated |
 
 ## Coverage by Profile
 
 **baseline** (per-user dev hardening; some warns to keep flow):
-- All blocking hooks: secret-guard, secret-leak-detector, keychain-guard, mcp-secret-guard, destructive-fs-guard, sensitive-paths-guard, pipe-to-shell-guard, submodule-injection-guard, git-history-rewrite-guard, webfetch-egress-guard
-- Warn hooks: git-destructive-guard, dotfile-guard, branch-protection-guard, commit-amend-pushed-guard, bash-structural-guard, bash-egress-guard, audit-tamper-detector
-- Log-only hooks: audit-session-summary
+- All blocking hooks: secret-guard, secret-leak-detector, keychain-guard, mcp-secret-guard, destructive-fs-guard, sensitive-paths-guard, pipe-to-shell-guard, submodule-injection-guard, git-history-rewrite-guard, webfetch-egress-guard, task-tool-input-guard
+- Warn hooks: git-destructive-guard, dotfile-guard, branch-protection-guard, commit-amend-pushed-guard, bash-structural-guard, bash-egress-guard, audit-tamper-detector, claude-md-validator, disable-all-hooks-detector, local-settings-precedence-checker, subagent-spawn-guard
+- Log-only hooks: audit-session-summary, behavioral-rule-enforcer, untrusted-content-tagger, agent-allowlist-enforcer
 
-**strict** (team / shared infra; everything blocking):
-- Same hooks as baseline; git-destructive-guard, dotfile-guard, branch-protection-guard, commit-amend-pushed-guard, bash-structural-guard, bash-egress-guard, and audit-tamper-detector upgrade to block
+**strict** (team / shared infra; everything blocking that can be):
+- Same hooks as baseline plus the agent-gating overlay (subagent-spawn-guard, task-tool-input-guard, agent-allowlist-enforcer)
+- git-destructive-guard, dotfile-guard, branch-protection-guard, commit-amend-pushed-guard, bash-structural-guard, bash-egress-guard, audit-tamper-detector, claude-md-validator, subagent-spawn-guard upgrade to block
+- audit.egress_allowlist tightened to 4 hosts (docs.anthropic.com, github.com, registry.npmjs.org, pypi.org)
 
 **regulated** (healthcare, legal, public-sector):
-- Same as strict in Plan 4; further differentiation lands in Plan 5 with mdm-bypass and agent-gating overlays
+- Same as strict plus the mdm-bypass overlay (disable-all-hooks-detector, local-settings-precedence-checker)
+- local-settings-precedence-checker and agent-allowlist-enforcer upgrade to block
+- audit.egress_allowlist tightened to 2 hosts (docs.anthropic.com, github.com)
 
 ## How to read this matrix
 

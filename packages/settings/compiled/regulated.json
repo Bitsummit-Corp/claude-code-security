@@ -111,11 +111,11 @@
       },
       {
         "pattern": "Edit(*.gitmodules)",
-        "threat": "T-013-supply-chain-submodule"
+        "threat": "T-018-supply-chain-submodule"
       },
       {
         "pattern": "Write(*.gitmodules)",
-        "threat": "T-013-supply-chain-submodule"
+        "threat": "T-018-supply-chain-submodule"
       },
       {
         "pattern": "WebFetch(*pastebin.com*)",

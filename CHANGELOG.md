@@ -4,6 +4,26 @@ All notable changes to this project will be documented here. Format follows [Kee
 
 ## [Unreleased]
 
+## [0.5.0-beta.0] - 2026-04-29
+
+### Added
+- 8 new hooks: `behavioral-rule-enforcer`, `claude-md-validator`, `untrusted-content-tagger`, `disable-all-hooks-detector`, `local-settings-precedence-checker`, `subagent-spawn-guard`, `task-tool-input-guard`, `agent-allowlist-enforcer`. Hook surface complete (26 hooks total).
+- New `@bitsummit/ccsec-rules` package with CLAUDE.md hardening templates per profile (baseline, strict, regulated) plus reusable snippets (no-eval, no-curl-pipe-shell, no-force-push).
+- New overlays: `overlays/behavioral.json`, `overlays/mdm-bypass.json`, `overlays/agent-gating.json`.
+- Integration transcripts: behavioral-bypass-attempt, mdm-bypass-attempt, subagent-escape-attempt, regulated-profile-end-to-end.
+- Threat model entries: T-010 Prompt Injection from Tool Output, T-011 Subagent Escape, T-012 MDM Bypass via disableAllHooks (passive per ADR-0003), T-013 Local Settings Overriding Managed.
+
+### Changed
+- **Strict and regulated profiles now differentiated for real** (Plans 1-4 shipped them as identical-content shells). Strict adds tighter egress allowlist (4 hosts) plus the agent-gating overlay; regulated adds the tightest egress (2 hosts) plus the mdm-bypass overlay.
+- Settings compiler deep-merges top-level objects from extends fragments and applies sub-key overrides from `profile.overrides`. This lets `audit.log_path` (base) and `audit.egress_allowlist` (network-egress overlay) and `audit.verify_on_session_start` (audit overlay) coexist, while strict/regulated tighten only `egress_allowlist`.
+- Threat ID cleanup: `submodule-injection-guard` renamed to `T-018-supply-chain-submodule` (was `T-005` in Plan 3, then `T-013` in Plan 4). T-013 is now reserved for local settings precedence.
+- Project version moves from `alpha` to `beta`. Hook surface is feature-complete; remaining plans are distribution (Plan 6), Jamf integration (Plan 7), full docs (Plan 8), release engineering (Plan 9), pilot validation (Plan 10).
+
+### Notes
+- Plugin / npm distribution still tracked for Plan 6.
+- Jamf / managed-settings.json deployment still tracked for Plan 7.
+- Signed releases / SBOM / GHSA workflow still tracked for Plan 9 (T-018 distribution-side coverage).
+
 ## [0.4.0-alpha.0] - 2026-04-29
 
 ### Added

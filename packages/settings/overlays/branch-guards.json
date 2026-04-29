@@ -3,8 +3,8 @@
     "deny": [
       { "pattern": "Bash(git filter-branch *)",      "threat": "T-008-history-rewrite" },
       { "pattern": "Bash(git filter-repo *)",        "threat": "T-008-history-rewrite" },
-      { "pattern": "Edit(*.gitmodules)",             "threat": "T-013-supply-chain-submodule" },
-      { "pattern": "Write(*.gitmodules)",            "threat": "T-013-supply-chain-submodule" }
+      { "pattern": "Edit(*.gitmodules)",             "threat": "T-018-supply-chain-submodule" },
+      { "pattern": "Write(*.gitmodules)",            "threat": "T-018-supply-chain-submodule" }
     ]
   },
   "hooks": {

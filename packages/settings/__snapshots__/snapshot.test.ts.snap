@@ -114,11 +114,11 @@ exports[`settings/compiled snapshots > baseline.json matches checked-in snapshot
       },
       {
         "pattern": "Edit(*.gitmodules)",
-        "threat": "T-013-supply-chain-submodule"
+        "threat": "T-018-supply-chain-submodule"
       },
       {
         "pattern": "Write(*.gitmodules)",
-        "threat": "T-013-supply-chain-submodule"
+        "threat": "T-018-supply-chain-submodule"
       },
       {
         "pattern": "WebFetch(*pastebin.com*)",
@@ -364,11 +364,11 @@ exports[`settings/compiled snapshots > regulated.json matches checked-in snapsho
       },
       {
         "pattern": "Edit(*.gitmodules)",
-        "threat": "T-013-supply-chain-submodule"
+        "threat": "T-018-supply-chain-submodule"
       },
       {
         "pattern": "Write(*.gitmodules)",
-        "threat": "T-013-supply-chain-submodule"
+        "threat": "T-018-supply-chain-submodule"
       },
       {
         "pattern": "WebFetch(*pastebin.com*)",
@@ -625,11 +625,11 @@ exports[`settings/compiled snapshots > strict.json matches checked-in snapshot 1
       },
       {
         "pattern": "Edit(*.gitmodules)",
-        "threat": "T-013-supply-chain-submodule"
+        "threat": "T-018-supply-chain-submodule"
       },
       {
         "pattern": "Write(*.gitmodules)",
-        "threat": "T-013-supply-chain-submodule"
+        "threat": "T-018-supply-chain-submodule"
       },
       {
         "pattern": "WebFetch(*pastebin.com*)",

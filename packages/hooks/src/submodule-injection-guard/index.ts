@@ -8,7 +8,7 @@ const submoduleInjectionGuard: HookModule = {
     name: 'submodule-injection-guard',
     event: 'PreToolUse',
     matchers: ['Edit', 'Write', 'Bash'],
-    threat: 'T-013-supply-chain-submodule',
+    threat: 'T-018-supply-chain-submodule',
     profiles: ['baseline', 'strict', 'regulated'],
     severity: 'block',
     timeout_ms: 1500,

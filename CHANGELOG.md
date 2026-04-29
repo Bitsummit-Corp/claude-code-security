@@ -4,6 +4,32 @@ All notable changes to this project will be documented here. Format follows [Kee
 
 ## [Unreleased]
 
+## [0.8.0-rc.0] - 2026-04-29
+
+This is a **release candidate**. Only Plan 9 (release engineering: signed releases, SBOM, GHSA workflow, OpenSSF Scorecard) and Plan 10 (pilot validation) remain before `v1.0.0`.
+
+### Added
+- `scripts/gen-hook-docs.mjs` and `scripts/gen-coverage-matrix.mjs`: Node ESM auto-generators that walk `packages/hooks/src/*/index.ts`, dynamically import each compiled hook from `dist/`, read its manifest, and emit `docs/hooks/<name>.md` (one page per hook, 26 total) and `docs/coverage-matrix.md` (threat-to-hook map plus per-event tables and summary stats).
+- `pnpm gen:hook-docs`, `pnpm gen:coverage-matrix`, `pnpm gen:docs` workspace scripts.
+- `docs/hooks/<name>.md` for all 26 hooks: manifest table (event, matchers, threat, profiles, severity, timeout), threat link to `docs/threat-model.md`, behavior + notes blocks (sourced from `// DOC:` and `// NOTES:` comment blocks in the hook source or left as TODO for hand-curation).
+- `docs/known-bypasses.md`: documented detection gaps with vector / detection status / recommended response. Eight bypasses covered: `disableAllHooks` (issue #26637), cross-process audit log fork, bash escape-handling in `maskQuotedRegions`, heredoc bodies, pipe-to-interpreter, obfuscated git via aliases, filesystem hardlinks / bind mounts, and `bash <<<$(curl)` combo.
+- `docs/adr/0005-rules-package-decision.md`: why `@bitsummit/ccsec-rules` ships markdown templates rather than executable rule code.
+- `docs/adr/0006-mdm-deployment-decision.md`: why we chose Jamf Configuration Profile + companion script for `managed-settings.json` deployment, and why we ship per-OS path templates rather than auto-detecting.
+- `docs/settings-reference.md`: schema-of-record for every settings.json key the project uses, including `schema`, `ccsec_version`, `audit.log_path`, `audit.egress_allowlist`, `audit.verify_on_session_start`, `permissions.deny[].pattern`, `permissions.deny[].threat`, `permissions.allow[]`, `hooks.<event>[].name`, plus the path-token table per OS.
+- `installers/windows/README.md`: substantive Intune deployment guide (~150 lines) covering Win32 app packaging, the v1.1 `install-managed.ps1` / `verify-managed.ps1` templates, NTFS ACL hardening, sha256 manifest, and Intune Compliance scheduling. Templates pending v1.1.
+- `installers/linux/README.md`: substantive Linux deployment guide (~150 lines) covering shell installer template, Ansible role template, `.deb` / `.rpm` packaging, `chattr +i` immutability, sha256 manifest, and systemd timer / cron scheduling. Templates pending v1.2.
+
+### Changed
+- `README.md`: moved from "Plan 7 of 10" to "Plan 8 of 10"; added release-candidate banner; added badges (MIT license, version, hook count, threat coverage, OpenSSF Scorecard placeholder); added Table of Contents linking Track 1-5 sections; added "What's protected / What's not" honesty box.
+- `docs/coverage-matrix.md`: replaced the hand-maintained Plan 1-5 version with the auto-generated artifact from `gen-coverage-matrix.mjs`. The new matrix groups by threat ID, includes per-event tables, and emits summary stats (26 hooks, 14 distinct threats, 4 events).
+- Stub READMEs at `installers/windows/README.md` and `installers/linux/README.md` replaced with full deployment guides.
+
+### Notes
+- 313 tests passing; coverage above 90 percent.
+- The `// DOC:` / `// NOTES:` source-comment convention is established but not yet populated; per-hook hand-curation is a follow-up. Each generated page falls back to a TODO line when the comments are absent, and the auto-generator's footer makes the regeneration command discoverable.
+- Plan 9 (release engineering) will add CI gates that fail on doc drift, sign release artifacts, emit SBOM, and stand up the GHSA + OpenSSF Scorecard workflow.
+- Plan 10 (pilot validation) is the final step before `v1.0.0`.
+
 ## [0.7.0-beta.0] - 2026-04-29
 
 ### Added

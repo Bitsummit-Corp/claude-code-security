@@ -64,6 +64,18 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  packages/plugin:
+    dependencies:
+      '@bitsummit/ccsec-cli':
+        specifier: workspace:*
+        version: link:../cli
+      '@bitsummit/ccsec-hooks':
+        specifier: workspace:*
+        version: link:../hooks
+      '@bitsummit/ccsec-settings':
+        specifier: workspace:*
+        version: link:../settings
+
   packages/rules: {}
 
   packages/settings: {}

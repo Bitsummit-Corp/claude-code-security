@@ -1,0 +1,17 @@
+{
+  "name": "@bitsummit/ccsec-plugin",
+  "version": "0.6.0-beta.0",
+  "private": false,
+  "type": "module",
+  "description": "BITSUMMIT Hardening - Claude Code plugin manifest and slash command",
+  "files": [".claude-plugin", "commands"],
+  "scripts": {
+    "typecheck": "echo no ts here",
+    "test": "echo no tests in this package"
+  },
+  "dependencies": {
+    "@bitsummit/ccsec-cli": "workspace:*",
+    "@bitsummit/ccsec-hooks": "workspace:*",
+    "@bitsummit/ccsec-settings": "workspace:*"
+  }
+}

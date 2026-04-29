@@ -119,6 +119,38 @@ exports[`settings/compiled snapshots > baseline.json matches checked-in snapshot
       {
         "pattern": "Write(*.gitmodules)",
         "threat": "T-005-supply-chain-submodule"
+      },
+      {
+        "pattern": "WebFetch(*pastebin.com*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "WebFetch(*paste.ee*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "WebFetch(*requestbin.com*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "WebFetch(*transfer.sh*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "Bash(curl * pastebin.com*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "Bash(curl * transfer.sh*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "Bash(curl https://[0-9]*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "Bash(wget https://[0-9]*)",
+        "threat": "T-005-network-exfil"
       }
     ],
     "allow": []
@@ -163,15 +195,29 @@ exports[`settings/compiled snapshots > baseline.json matches checked-in snapshot
       },
       {
         "name": "git-history-rewrite-guard"
+      },
+      {
+        "name": "webfetch-egress-guard"
+      },
+      {
+        "name": "bash-egress-guard"
       }
     ],
     "PostToolUse": [
       {
         "name": "secret-leak-detector"
+      },
+      {
+        "name": "audit-tamper-detector"
       }
     ],
     "UserPromptSubmit": [],
-    "SessionStart": []
+    "SessionStart": [],
+    "SubagentStop": [
+      {
+        "name": "audit-session-summary"
+      }
+    ]
   },
   "schema": 1,
   "ccsec_version": "0.1.0-alpha.0",
@@ -301,6 +347,38 @@ exports[`settings/compiled snapshots > regulated.json matches checked-in snapsho
       {
         "pattern": "Write(*.gitmodules)",
         "threat": "T-005-supply-chain-submodule"
+      },
+      {
+        "pattern": "WebFetch(*pastebin.com*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "WebFetch(*paste.ee*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "WebFetch(*requestbin.com*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "WebFetch(*transfer.sh*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "Bash(curl * pastebin.com*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "Bash(curl * transfer.sh*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "Bash(curl https://[0-9]*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "Bash(wget https://[0-9]*)",
+        "threat": "T-005-network-exfil"
       }
     ],
     "allow": []
@@ -345,15 +423,29 @@ exports[`settings/compiled snapshots > regulated.json matches checked-in snapsho
       },
       {
         "name": "git-history-rewrite-guard"
+      },
+      {
+        "name": "webfetch-egress-guard"
+      },
+      {
+        "name": "bash-egress-guard"
       }
     ],
     "PostToolUse": [
       {
         "name": "secret-leak-detector"
+      },
+      {
+        "name": "audit-tamper-detector"
       }
     ],
     "UserPromptSubmit": [],
-    "SessionStart": []
+    "SessionStart": [],
+    "SubagentStop": [
+      {
+        "name": "audit-session-summary"
+      }
+    ]
   },
   "schema": 1,
   "ccsec_version": "0.1.0-alpha.0",
@@ -483,6 +575,38 @@ exports[`settings/compiled snapshots > strict.json matches checked-in snapshot 1
       {
         "pattern": "Write(*.gitmodules)",
         "threat": "T-005-supply-chain-submodule"
+      },
+      {
+        "pattern": "WebFetch(*pastebin.com*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "WebFetch(*paste.ee*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "WebFetch(*requestbin.com*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "WebFetch(*transfer.sh*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "Bash(curl * pastebin.com*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "Bash(curl * transfer.sh*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "Bash(curl https://[0-9]*)",
+        "threat": "T-005-network-exfil"
+      },
+      {
+        "pattern": "Bash(wget https://[0-9]*)",
+        "threat": "T-005-network-exfil"
       }
     ],
     "allow": []
@@ -527,15 +651,29 @@ exports[`settings/compiled snapshots > strict.json matches checked-in snapshot 1
       },
       {
         "name": "git-history-rewrite-guard"
+      },
+      {
+        "name": "webfetch-egress-guard"
+      },
+      {
+        "name": "bash-egress-guard"
       }
     ],
     "PostToolUse": [
       {
         "name": "secret-leak-detector"
+      },
+      {
+        "name": "audit-tamper-detector"
       }
     ],
     "UserPromptSubmit": [],
-    "SessionStart": []
+    "SessionStart": [],
+    "SubagentStop": [
+      {
+        "name": "audit-session-summary"
+      }
+    ]
   },
   "schema": 1,
   "ccsec_version": "0.1.0-alpha.0",

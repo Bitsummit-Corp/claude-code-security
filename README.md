@@ -14,4 +14,4 @@ MIT. See [LICENSE](./LICENSE).
 
 ## Security
 
-Report vulnerabilities to `security@bitsummit.ca`. See [SECURITY.md](./SECURITY.md).
+Report vulnerabilities to `security@bitsummit.ca`. A full disclosure policy will land in `SECURITY.md` (planned for the threat-model task).

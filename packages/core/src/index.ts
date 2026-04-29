@@ -4,3 +4,5 @@ export { resolveTokens } from './path-tokens.js';
 export type { TargetOS } from './path-tokens.js';
 export { detectSecrets, SECRET_PATTERNS } from './secret-patterns.js';
 export type { SecretHit, SecretPattern } from './secret-patterns.js';
+export { detectStructuralRisks } from './bash-parser.js';
+export type { StructuralRisk, StructuralRiskKind } from './bash-parser.js';

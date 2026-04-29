@@ -1,0 +1,17 @@
+{
+  "name": "sensitive-paths-attempt",
+  "events": [
+    { "tool": "Read", "event": "PreToolUse", "input": { "file_path": "/Users/x/.ssh/id_rsa" } },
+    { "tool": "Read", "event": "PreToolUse", "input": { "file_path": "/Users/x/.kube/config" } },
+    { "tool": "Read", "event": "PreToolUse", "input": { "file_path": "/Users/x/.netrc" } },
+    { "tool": "Edit", "event": "PreToolUse", "input": { "file_path": "/Users/x/.zshrc", "old_string": "x", "new_string": "y" } },
+    { "tool": "Read", "event": "PreToolUse", "input": { "file_path": "/Users/x/code/main.ts" } }
+  ],
+  "expected": [
+    { "decision": "block", "blockedBy": "sensitive-paths-guard" },
+    { "decision": "block", "blockedBy": "sensitive-paths-guard" },
+    { "decision": "block", "blockedBy": "sensitive-paths-guard" },
+    { "decision": "warn" },
+    { "decision": "allow" }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "destructive-attempt",
+  "events": [
+    { "tool": "Bash", "event": "PreToolUse", "input": { "command": "rm -rf /tmp/scratch" } },
+    { "tool": "Bash", "event": "PreToolUse", "input": { "command": "rm -rf /Users/x" } },
+    { "tool": "Bash", "event": "PreToolUse", "input": { "command": "git push --force origin main" } }
+  ],
+  "expected": [
+    { "decision": "allow" },
+    { "decision": "block", "blockedBy": "destructive-fs-guard" },
+    { "decision": "warn" }
+  ]
+}

@@ -1,16 +1,16 @@
 # claude-code-security
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![Version](https://img.shields.io/badge/version-0.8.0--rc.0-orange)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.9.0--rc.1-orange)](./CHANGELOG.md)
 [![Hooks](https://img.shields.io/badge/hooks-26-success)](./docs/coverage-matrix.md)
 [![Threat coverage](https://img.shields.io/badge/threat%20coverage-18%2F18-success)](./docs/threat-model.md)
 [![OpenSSF Scorecard](https://img.shields.io/badge/OpenSSF%20Scorecard-pending%20Plan%209-lightgrey)](./docs/superpowers/plans/)
 
-> **Status:** Release candidate (`v0.8.0-rc.0`). Hook surface is feature-complete (26 hooks, 313 tests). Track 1-5 documentation shipped in this release. Plan 9 (release engineering) and Plan 10 (pilot validation) remain before `v1.0.0`.
+> **Status:** Release candidate (`v0.9.0-rc.1`). Hook surface is feature-complete (26 hooks, 313 tests). Track 1-5 documentation, release-engineering substrate (SBOM, GHSA pipeline, SEA binary build templates, SHA256SUMS) shipped. Only Plan 10 (pilot validation) remains before `v1.0.0`.
 
 Open-source hardening reference for Anthropic's Claude Code. Ships hooks, layered settings templates, behavioral CLAUDE.md rules, and OS-specific installers so individual developers can harden their own installs and IT admins can deploy a vetted policy via MDM.
 
-This repo is on a 10-plan path to `v1.0.0`. We are currently shipping **Plan 8 of 10** (Track 1-5 documentation + release candidate). See `docs/superpowers/plans/` for the full sequence.
+This repo is on a 10-plan path to `v1.0.0`. We are currently shipping **Plan 9 of 10** (release engineering: SBOM + GHSA + SEA binaries + SHA256SUMS). See `docs/superpowers/plans/` for the full sequence.
 
 ## Table of Contents
 

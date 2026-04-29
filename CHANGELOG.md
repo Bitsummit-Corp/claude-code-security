@@ -4,6 +4,32 @@ All notable changes to this project will be documented here. Format follows [Kee
 
 ## [Unreleased]
 
+## [0.9.0-rc.1] - 2026-04-29
+
+This is a **release candidate**. Only Plan 10 (pilot validation) remains before `v1.0.0`.
+
+This release ships the release-engineering substrate: SBOM, GHSA pipeline scaffolding, Node SEA binary build templates, provenance, and the canonical release runbook. Actual signature production (PGP, Apple Developer ID, Authenticode) is gated on maintainer-provisioned secrets and is wired as drop-in steps in `docs/release-engineering.md`.
+
+### Added
+- `.github/workflows/release.yml` job `publish` now runs `npx @cyclonedx/cyclonedx-npm@2` after the npm publish step and attaches `sbom.cyclonedx.json` as a release asset.
+- `.github/workflows/release.yml` job `sea-build`: matrix build (`macos-14`, `macos-13`, `ubuntu-latest`, `windows-latest`) producing Node Single-Executable Application binaries `ccsec-{macos-arm64, macos-x64, linux-x64, windows-x64}` via `scripts/build-sea.sh` (esbuild bundle, SEA blob, postject inject).
+- `.github/workflows/release.yml` job `release-manifest`: downloads SEA artifacts, generates `SHA256SUMS`, attaches binaries + manifest to the GitHub release. PGP-signing the manifest is wired as a documented future step in `docs/release-engineering.md` and a TODO comment in the workflow.
+- `scripts/build-sea.sh`: cross-platform SEA build script (macOS arm64/x64, Linux x64, Windows x64) using `esbuild@0.20` for bundling and `postject@1` for blob injection. Auto-detects target if not supplied; handles macOS codesign-removal pre-postject.
+- `docs/release-engineering.md`: canonical release runbook covering pre-release gates, version + tag, the three CI jobs, signing slots (PGP, Apple Developer ID + notarize, Windows Authenticode), the secrets the maintainer must provision, post-release verification, the security-advisory pipeline (GHSA private fork -> coordinated disclosure -> publish), and backports across `release/v1.x`.
+- `.github/security-advisory-template.md`: template for new GitHub Security Advisories. Reporter sections + maintainer sections clearly delineated; includes CVSS 4.0 placeholder, threat ID linkage to `docs/threat-model.md`, and disclosure-timeline grid.
+- `.github/SECURITY.yml`: minimal GHSA configuration pointing at `SECURITY.md` and the advisory template, with `bit-haseebminhas` as default reviewer.
+- `docs/superpowers/specs/2026-04-29-plan9-release-engineering.md` and `docs/superpowers/plans/2026-04-29-phase1-plan9-release-engineering.md`.
+
+### Changed
+- `SECURITY.md`: added explicit Disclosure Timeline section (ack 72h, fix-or-roadmap HIGH 14d / MEDIUM 30d, default 90-day disclosure window, CRITICAL collapse-to-fastest); added GHSA URL as preferred reporting channel; added Hall of Thanks placeholder section; added PGP Key placeholder section pointing at the runbook for generation procedure; expanded scope statement to enumerate shipped binaries; clarified the SemVer security carve-out.
+- `.github/workflows/release.yml` `permissions.contents` raised from `read` to `write` so `softprops/action-gh-release@v2` can attach assets.
+
+### Notes
+- 313 tests passing; coverage above 90 percent. No new tests (Plan 9 ships CI infrastructure, not new hook code).
+- Actual signature production requires maintainer-provisioned secrets: `GPG_PRIVATE_KEY`, `GPG_PASSPHRASE`, `APPLE_CERT_P12`, `APPLE_CERT_PASSWORD`, `APPLE_TEAM_ID`, `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`, `WINDOWS_CERT_PFX`, `WINDOWS_CERT_PASSWORD`. The runbook documents how to provision each.
+- `npm publish --provenance` was already wired in Plan 6 (`v0.6.0-beta.0`); SLSA Level 3 attestation is automatic when `id-token: write` is set, which it is.
+- Plan 10 (pilot validation) is the final step before `v1.0.0`.
+
 ## [0.8.0-rc.0] - 2026-04-29
 
 This is a **release candidate**. Only Plan 9 (release engineering: signed releases, SBOM, GHSA workflow, OpenSSF Scorecard) and Plan 10 (pilot validation) remain before `v1.0.0`.

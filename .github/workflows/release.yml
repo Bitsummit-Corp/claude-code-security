@@ -78,3 +78,30 @@ jobs:
           name: ccsec-${{ matrix.target }}
           path: dist/binaries/ccsec-${{ matrix.target }}${{ matrix.ext }}
           if-no-files-found: error
+
+  release-manifest:
+    needs: sea-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist/binaries
+          merge-multiple: true
+      - name: Generate SHA-256 manifest
+        run: |
+          cd dist/binaries
+          ls -lh
+          shasum -a 256 ccsec-* > SHA256SUMS
+          cat SHA256SUMS
+      # NOTE: PGP signing of SHA256SUMS is a maintainer-action gate.
+      # Once GPG_PRIVATE_KEY + GPG_PASSPHRASE secrets are provisioned, add a
+      # `gpg --detach-sign --armor SHA256SUMS` step here and include
+      # `dist/binaries/SHA256SUMS.asc` in the upload set. See docs/release-engineering.md.
+      - name: Attach binaries + SHA256SUMS to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/binaries/ccsec-*
+            dist/binaries/SHA256SUMS
+          prerelease: ${{ contains(github.ref, '-rc.') || contains(github.ref, '-beta.') || contains(github.ref, '-alpha.') }}

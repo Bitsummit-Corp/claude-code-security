@@ -1,0 +1,27 @@
+{
+  "name": "claude-code-security",
+  "version": "0.1.0-alpha.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.12.0",
+  "engines": { "node": ">=20.10.0" },
+  "scripts": {
+    "build": "pnpm -r --parallel build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . --ext .ts,.tsx,.js,.cjs,.mjs",
+    "format": "prettier --write .",
+    "typecheck": "pnpm -r --parallel typecheck",
+    "build:settings": "pnpm --filter @bitsummit/ccsec-cli build && node packages/cli/dist/index.js compile --profile baseline --out packages/settings/compiled/baseline.json"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.0",
+    "@typescript-eslint/eslint-plugin": "^7.5.0",
+    "@typescript-eslint/parser": "^7.5.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  }
+}

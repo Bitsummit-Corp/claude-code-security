@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import { readFile, mkdtemp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
@@ -21,6 +21,9 @@ const ALL_HOOKS = [
 const here = dirname(fileURLToPath(import.meta.url));
 
 describe('integration: attack-chain', () => {
+  beforeAll(() => {
+    process.env.HOME = '/Users/x';
+  });
   let auditPath: string;
   beforeEach(async () => {
     auditPath = join(await mkdtemp(join(tmpdir(), 'ccsec-int-')), 'audit.jsonl');

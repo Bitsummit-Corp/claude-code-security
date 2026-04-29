@@ -60,6 +60,8 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  packages/settings: {}
+
 packages:
 
   '@ampproject/remapping@2.3.0':

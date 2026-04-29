@@ -1,0 +1,11 @@
+{
+  "name": "@bitsummit/ccsec-rules",
+  "version": "0.1.0-alpha.0",
+  "private": false,
+  "type": "module",
+  "files": ["templates"],
+  "scripts": {
+    "typecheck": "echo no ts in this package",
+    "test": "echo no tests in this package"
+  }
+}

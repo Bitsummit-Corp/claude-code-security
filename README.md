@@ -1,19 +1,28 @@
 # claude-code-security
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![Version](https://img.shields.io/badge/version-0.9.0--rc.1-orange)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.9.0--rc.2-orange)](./CHANGELOG.md)
 [![Hooks](https://img.shields.io/badge/hooks-26-success)](./docs/coverage-matrix.md)
 [![Threat coverage](https://img.shields.io/badge/threat%20coverage-18%2F18-success)](./docs/threat-model.md)
-[![OpenSSF Scorecard](https://img.shields.io/badge/OpenSSF%20Scorecard-pending%20Plan%209-lightgrey)](./docs/superpowers/plans/)
+[![OpenSSF Scorecard](https://img.shields.io/badge/OpenSSF%20Scorecard-pending%20v1.0.0-lightgrey)](./docs/superpowers/plans/)
 
-> **Status:** Release candidate (`v0.9.0-rc.1`). Hook surface is feature-complete (26 hooks, 313 tests). Track 1-5 documentation, release-engineering substrate (SBOM, GHSA pipeline, SEA binary build templates, SHA256SUMS) shipped. Only Plan 10 (pilot validation) remains before `v1.0.0`.
+> **Status:** Release candidate (`v0.9.0-rc.2`). Plans 1-9 of 10 shipped. The project is feature-complete (26 hooks, 18 threats, 313 tests) and infrastructure-complete (SBOM, GHSA pipeline, SEA binary build templates, SHA256SUMS, release runbook). **Plan 10 is user-action**: pilot validation and external security review. `v1.0.0` ships when the maintainer completes Plan 10. See [docs/v1.0.0-readiness.md](./docs/v1.0.0-readiness.md).
 
 Open-source hardening reference for Anthropic's Claude Code. Ships hooks, layered settings templates, behavioral CLAUDE.md rules, and OS-specific installers so individual developers can harden their own installs and IT admins can deploy a vetted policy via MDM.
 
-This repo is on a 10-plan path to `v1.0.0`. We are currently shipping **Plan 9 of 10** (release engineering: SBOM + GHSA + SEA binaries + SHA256SUMS). See `docs/superpowers/plans/` for the full sequence.
+## v1.0.0 path
+
+`v1.0.0` is gated on three user-action items the maintainer drives, not Claude Code:
+
+1. **Pilot validation** with a real regulated client - see [docs/pilot-validation.md](./docs/pilot-validation.md) for the six-week runbook.
+2. **External security review** by a third-party firm - see [docs/external-security-review-rfp.md](./docs/external-security-review-rfp.md) for the RFP template.
+3. **Release-signing secrets provisioned** (PGP, npm token, Apple Developer ID, optional Windows EV) - see [docs/v1.0.0-readiness.md](./docs/v1.0.0-readiness.md) for the full checklist.
+
+The full Plan 1 through Plan 10 sequence is at [`docs/superpowers/plans/`](./docs/superpowers/plans/).
 
 ## Table of Contents
 
+- [v1.0.0 path](#v100-path)
 - [What's protected / What's not](#whats-protected--whats-not)
 - [Install](#install)
 - [Profile Chooser](#profile-chooser)

@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
@@ -37,3 +37,12 @@ jobs:
           for pkg in core hooks settings cli rules plugin meta; do
             (cd packages/$pkg && pnpm publish --access public --no-git-checks --provenance) || echo "publish of $pkg failed (may be acceptable if version unchanged)"
           done
+      - name: Generate SBOM (CycloneDX)
+        run: |
+          npx --yes @cyclonedx/cyclonedx-npm@2 --output-file sbom.cyclonedx.json --output-format JSON
+          ls -lh sbom.cyclonedx.json
+      - name: Attach SBOM to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: sbom.cyclonedx.json
+          prerelease: ${{ contains(github.ref, '-rc.') || contains(github.ref, '-beta.') || contains(github.ref, '-alpha.') }}

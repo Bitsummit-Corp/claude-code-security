@@ -17,7 +17,7 @@ export async function main(argv: string[]): Promise<void> {
     .requiredOption('--out <path>')
     .option('--target <kind>', 'managed | user', 'user')
     .option('--os <os>', 'macos | linux | windows', detectOs())
-    .option('--settings-root <path>', SETTINGS_ROOT_DEFAULT)
+    .option('--settings-root <path>', 'path to packages/settings', SETTINGS_ROOT_DEFAULT)
     .action(async (opts) => {
       await compileCommand({ settingsRoot: opts.settingsRoot, profile: opts.profile, out: opts.out, target: opts.target, os: opts.os });
       console.log(`compiled ${opts.profile} -> ${opts.out}`);
@@ -27,7 +27,7 @@ export async function main(argv: string[]): Promise<void> {
     .requiredOption('--profile <name>')
     .option('--claude-dir <path>', `${process.env.HOME}/.claude`)
     .option('--os <os>', detectOs())
-    .option('--settings-root <path>', SETTINGS_ROOT_DEFAULT)
+    .option('--settings-root <path>', 'path to packages/settings', SETTINGS_ROOT_DEFAULT)
     .option('--dry-run', '', false)
     .action(async (opts) => {
       const r = await applyCommand({ settingsRoot: opts.settingsRoot, profile: opts.profile, claudeDir: opts.claudeDir, os: opts.os, dryRun: !!opts.dryRun });

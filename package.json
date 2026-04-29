@@ -12,7 +12,7 @@
     "lint": "eslint . --ext .ts,.tsx,.js,.cjs,.mjs",
     "format": "prettier --write .",
     "typecheck": "pnpm -r --parallel typecheck",
-    "build:settings": "pnpm --filter @bitsummit/ccsec-cli build && node packages/cli/dist/index.js compile --profile baseline --out packages/settings/compiled/baseline.json"
+    "build:settings": "pnpm --filter @bitsummit/ccsec-cli build && node packages/cli/bin/ccsec.js compile --profile baseline --out packages/settings/compiled/baseline.json --target user --os macos --settings-root packages/settings"
   },
   "devDependencies": {
     "@types/node": "^20.12.0",

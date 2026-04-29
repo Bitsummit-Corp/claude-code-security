@@ -8,3 +8,5 @@ export { detectStructuralRisks } from './bash-parser.js';
 export type { StructuralRisk, StructuralRiskKind } from './bash-parser.js';
 export { AuditLogger } from './audit-logger.js';
 export type { AuditInput, AuditRecord } from './audit-logger.js';
+export { runHooks } from './runner.js';
+export type { RunInput, RunOptions, RunResult, HookInvocation } from './runner.js';

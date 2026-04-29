@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "deny": [
+      { "pattern": "Read(${HOME}/.kube/**)",               "threat": "T-003-credential-exfil" },
+      { "pattern": "Read(${HOME}/.docker/config.json)",    "threat": "T-003-credential-exfil" },
+      { "pattern": "Read(${HOME}/.netrc)",                 "threat": "T-003-credential-exfil" },
+      { "pattern": "Read(${HOME}/.config/gh/hosts.yml)",   "threat": "T-003-credential-exfil" },
+      { "pattern": "Read(/etc/sudoers)",                   "threat": "T-003-credential-exfil" },
+      { "pattern": "Read(/etc/sudoers.d/**)",              "threat": "T-003-credential-exfil" }
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      { "name": "sensitive-paths-guard" },
+      { "name": "dotfile-guard" }
+    ]
+  }
+}

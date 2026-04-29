@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "deny": [
+      { "pattern": "Bash(rm -rf /)",                       "threat": "T-002-destructive-fs" },
+      { "pattern": "Bash(rm -rf /*)",                      "threat": "T-002-destructive-fs" },
+      { "pattern": "Bash(rm -rf ${HOME})",                 "threat": "T-002-destructive-fs" },
+      { "pattern": "Bash(rm -rf ~)",                       "threat": "T-002-destructive-fs" },
+      { "pattern": "Bash(mkfs *)",                         "threat": "T-002-destructive-fs" },
+      { "pattern": "Bash(dd * of=/dev/*)",                 "threat": "T-002-destructive-fs" },
+      { "pattern": "Bash(shred -u *)",                     "threat": "T-002-destructive-fs" },
+      { "pattern": "Bash(git push --force *)",             "threat": "T-004-branch-sabotage" },
+      { "pattern": "Bash(git push -f *)",                  "threat": "T-004-branch-sabotage" }
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      { "name": "destructive-fs-guard" },
+      { "name": "git-destructive-guard" }
+    ]
+  }
+}

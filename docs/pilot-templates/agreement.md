@@ -1,10 +1,10 @@
 # Pilot Agreement Template
 
-> **Disclaimer.** This template is a starting point for negotiation between BITSUMMIT and the pilot client. It is not a finished contract. It has not been reviewed by counsel for either party. Before signing, both parties must route this through their own legal counsel. Sections marked `[FILL]` require negotiation. Sections marked `[BOILERPLATE]` are common in pilot agreements but should be reviewed for your jurisdiction.
+> **Disclaimer.** This template is a starting point for negotiation between the project's deploying organization (the **Provider**) and the **Pilot Client**. It is published openly so any organization adopting `claude-code-security` can use it; BITSUMMIT itself uses it as Provider for BITSUMMIT-led pilots. It is not a finished contract. It has not been reviewed by counsel for either party. Before signing, both parties must route this through their own legal counsel. Sections marked `[FILL]` require negotiation. Sections marked `[BOILERPLATE]` are common in pilot agreements but should be reviewed for your jurisdiction.
 
 ## Parties
 
-- **Provider:** BITSUMMIT (`[FILL legal entity name and address]`).
+- **Provider:** `[FILL legal entity name and address]` (BITSUMMIT for BITSUMMIT-led pilots; substitute the deploying organization otherwise).
 - **Pilot Client:** `[FILL legal entity name and address]`.
 - **Effective Date:** `[FILL]`.
 - **Pilot Window:** Six weeks from Effective Date, extendable by mutual written agreement.

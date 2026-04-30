@@ -1,6 +1,6 @@
 # Pilot Validation Runbook
 
-This document is the canonical procedure for validating BITSUMMIT Hardening (claude-code-security) with a real pilot client before shipping `v1.0.0`. It is intended to be read end-to-end before the pilot kickoff, then used as a working checklist during the engagement.
+This document is the canonical procedure for validating `claude-code-security` (also distributed as the BITSUMMIT Hardening plugin) with a real pilot client before shipping `v1.0.0`. It is intended to be read end-to-end before the pilot kickoff, then used as a working checklist during the engagement. The runbook is published openly so any organization adopting this project can run an internal pilot using the same structure; BITSUMMIT itself uses it for the `v1.0.0`-gating pilot, but it is not BITSUMMIT-only.
 
 ## Why a pilot
 
@@ -9,7 +9,7 @@ The hook surface is feature-complete (26 hooks covering 18 documented threats). 
 Before declaring `v1.0.0` we need three things that no amount of testing can produce on its own:
 
 1. **Real-world deployment validation.** The `regulated` profile must be deployable in a real organization with a real MDM, a real auditor, and real developers. Lab testing is not the same as a pilot.
-2. **Walk-through by a non-BITSUMMIT operator.** Someone who has never seen the project must be able to read `docs/deployment/mdm-jamf.md` and deploy successfully without our help. If they cannot, the doc is wrong, not the operator.
+2. **Walk-through by an outside operator.** Someone who has not previously deployed the project must be able to read `docs/deployment/mdm-jamf.md` and deploy successfully without help from the maintainers. If they cannot, the doc is wrong, not the operator.
 3. **External security signoff.** A paid third-party security firm must review the threat model, hook code, settings schema, and deployment guides, and sign off that the project does what it claims. Their report attaches to the `v1.0.0` release notes.
 
 Plan 10 ships the runbook, RFP, and templates that drive these three actions. The maintainer drives the actions themselves.
@@ -38,7 +38,7 @@ Entry: Pilot client identified and pilot agreement template (`docs/pilot-templat
 Activities:
 - Sign pilot agreement (run by the client's legal counsel; the template is a starting point, not a finished contract).
 - Identify the **pilot lead** at the client. This is one named person who owns the engagement on the client side and signs off at the end.
-- BITSUMMIT compiles the regulated profile for the client environment: profile chooser baseline (`regulated`), per-OS path tokens, audit log path under `/var/log/`, MDM bypass detection enabled, agent allowlist seeded with the client's permitted subagents.
+- The deploying maintainer compiles the regulated profile for the client environment: profile chooser baseline (`regulated`), per-OS path tokens, audit log path under `/var/log/`, MDM bypass detection enabled, agent allowlist seeded with the client's permitted subagents.
 - Walk-through call (60 minutes) of `docs/deployment/mdm-jamf.md` (or the Windows / Linux equivalent) with the pilot lead and the MDM admin.
 - Deploy to **2-3 test machines** (not production). Verify `verify-managed.sh` passes, `ccsec doctor` passes, audit log writes correctly.
 

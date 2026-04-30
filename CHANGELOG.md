@@ -6,6 +6,7 @@ All notable changes to this project will be documented here. Format follows [Kee
 
 ### Changed
 - **2026-04-29 14:42** Redacted real prospect / client names from all public docs. Replaced specific organization names with anonymized candidate profiles (regulated municipal / law-enforcement Windows-heavy; regulated forensics / public-safety mixed-fleet; federally-regulated Mac-heavy research org). Specific candidate names are now tracked privately by the maintainer. Affected: `docs/pilot-validation.md`, `docs/v1.0.0-readiness.md`, `docs/external-security-review-rfp.md`, `docs/superpowers/plans/2026-04-29-phase1-plan10-pilot-validation.md`, `docs/superpowers/specs/2026-04-29-plan10-pilot-validation.md`, `docs/superpowers/specs/2026-04-29-claude-code-security-repo-design.md`, and the prior `[0.9.0-rc.2]` Added entry.
+- **2026-04-30 10:08** OSS-framing pass: pilot runbook, pilot agreement template, pilot final-report signature line, RFP intro and submission line, and v1.0.0-readiness pilot definition rephrased so external adopters can run them, not only BITSUMMIT-led pilots. Added `docs/superpowers/README.md` marking that directory as the maintainer's build journal (kept for transparency, not load-bearing for adoption). Affected: `docs/pilot-validation.md`, `docs/v1.0.0-readiness.md`, `docs/pilot-templates/agreement.md`, `docs/pilot-templates/final-report.md`, `docs/external-security-review-rfp.md`, `docs/superpowers/README.md` (new).
 
 ## [0.9.0-rc.2] - 2026-04-29
 

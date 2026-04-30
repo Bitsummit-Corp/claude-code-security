@@ -110,7 +110,9 @@ If any box is unchecked, list the blocker:
 
 **Pilot Client authorized signatory:** ___________________________ Date: ___________
 
-**BITSUMMIT (Provider):** ___________________________ Date: ___________
+**Provider:** ___________________________ Date: ___________
+
+> Provider is the deploying organization (BITSUMMIT for BITSUMMIT-led pilots; the adopting organization otherwise).
 
 ---
 

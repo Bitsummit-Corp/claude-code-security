@@ -1,6 +1,6 @@
 # External Security Review - Request for Proposal
 
-This is a template the maintainer uses to solicit a paid third-party security review of `claude-code-security` before tagging `v1.0.0`. Send to 3-5 firms in parallel. Pick based on response quality, scope match, and budget.
+This is a template the maintainer uses to solicit a paid third-party security review of `claude-code-security` before tagging `v1.0.0`. Send to 3-5 firms in parallel. Pick based on response quality, scope match, and budget. Adopters running their own deployment of this project may also use this RFP template; substitute your contact details in the Submission section below.
 
 ## Project overview
 
@@ -110,6 +110,6 @@ The firm fills this out before signing the SOW. Replies under 150 words per ques
 
 ## Submission
 
-The maintainer's contact for this RFP is `security@bitsummit.com`. PGP key fingerprint to be published in `SECURITY.md` once generated; until then encrypted submission is via signal at the maintainer's published number.
+For BITSUMMIT-issued RFPs, contact is `security@bitsummit.com`. PGP key fingerprint to be published in `SECURITY.md` once generated; until then plain email is acceptable but treat the contents as untrusted by transport. Adopters using this template substitute their own contact channel here.
 
 Responses requested within 10 business days of RFP receipt. Engagement signed within 20 business days of receipt.

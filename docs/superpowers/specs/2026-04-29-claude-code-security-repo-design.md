@@ -519,7 +519,7 @@ These do not block design approval but should be resolved during writing-plans:
 2. **Org for the GitHub repo** - `bit-haseebminhas/` (personal) vs. a BITSUMMIT GitHub org? Affects ownership perception and the `security@` mailbox.
 3. **External pre-release security reviewer** - name, budget, timeline. Critical for credibility on day-one launch.
 4. **PGP key custody** - release-signing key generation, storage, and rotation procedure.
-5. **Pilot client for `regulated` profile validation** - which existing BITSUMMIT client is best suited (a regulated municipal agency? a regional law-enforcement service? a federally-regulated research organization?) and what does their participation look like?
+5. **Pilot client for `regulated` profile validation** - which existing BITSUMMIT client is best suited (specific candidates tracked privately in the maintainer's pipeline; profiles described in `docs/pilot-validation.md`) and what does their participation look like?
 6. **Audit log format** - JSONL is decided; the per-record schema (CEF, ECS, custom) is not. Recommend ECS so future SIEM integration is one-shot.
 
 ---

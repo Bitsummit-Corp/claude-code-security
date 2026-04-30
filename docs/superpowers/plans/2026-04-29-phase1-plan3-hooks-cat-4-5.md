@@ -384,7 +384,7 @@ git push origin main
 git push origin v0.3.0-alpha.0
 ```
 
-Create release with `gh release create v0.3.0-alpha.0 --repo Bitsummit-Corp/claude-code-security --title "v0.3.0-alpha.0 - Hooks Categories 4-5 (Bash Structural + Branch Guards)" --notes-file <notes> --prerelease`. Notes summarize the 6 hooks, parser improvements, and 5 new threats covered.
+Create release with `gh release create v0.3.0-alpha.0 --repo Bitsummit-Corp/claude-code-governance --title "v0.3.0-alpha.0 - Hooks Categories 4-5 (Bash Structural + Branch Guards)" --notes-file <notes> --prerelease`. Notes summarize the 6 hooks, parser improvements, and 5 new threats covered.
 
 Plan 3 sealed.
 

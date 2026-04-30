@@ -4,7 +4,7 @@
 
 Two channels, in this order of preference:
 
-1. **GitHub Security Advisories** (preferred): file a private advisory at <https://github.com/Bitsummit-Corp/claude-code-security/security/advisories>. This routes directly into our triage queue and creates the GHSA record we publish on disclosure.
+1. **GitHub Security Advisories** (preferred): file a private advisory at <https://github.com/Bitsummit-Corp/claude-code-governance/security/advisories>. This routes directly into our triage queue and creates the GHSA record we publish on disclosure.
 2. **Email** `security@bitsummit.com`. PGP key fingerprint is **pending** (generation tracked in `docs/release-engineering.md`); plain email is acceptable in the interim, but treat the contents as untrusted by transport.
 
 Please do not file public GitHub issues for vulnerabilities.

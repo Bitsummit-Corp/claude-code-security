@@ -23,7 +23,7 @@ What Claude Code ships here is the runbook + RFP template + pilot templates + re
 `docs/pilot-validation.md`:
 
 - Why a pilot (real-world deployment validation; non-BITSUMMIT walks the MDM doc; external security signoff).
-- Candidate pilot clients (a regulated municipal agency, a regional law-enforcement service, a federally-regulated research organization, plus opportunistic).
+- Candidate pilot client profiles (regulated municipal / law-enforcement Windows-heavy, regulated forensics / public-safety mixed fleet, federally-regulated Mac-heavy research org, plus opportunistic). Specific names tracked privately.
 - Pilot criteria (≥5 devs, regulated industry preferred, MDM admin available, 4-6 week window, structured feedback).
 - Four-phase rollout (kickoff, rollout, hardening, signoff) with weekly checkpoints.
 - v1.0.0 readiness checklist.

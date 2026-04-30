@@ -108,7 +108,7 @@ We publish gaps because security tooling that claims "we catch everything" train
 
 ## Reporting a new bypass
 
-Open an issue at [github.com/Bitsummit-Corp/claude-code-security/issues](https://github.com/Bitsummit-Corp/claude-code-security/issues) with:
+Open an issue at [github.com/Bitsummit-Corp/claude-code-governance/issues](https://github.com/Bitsummit-Corp/claude-code-governance/issues) with:
 
 1. The exact command or attack pattern.
 2. Which hooks fired (if any) and which did not.

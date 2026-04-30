@@ -19,7 +19,7 @@ The end state: every Mac in the targeted smart group has a vetted, root-owned, i
 On the build host:
 
 ```
-git clone https://github.com/Bitsummit-Corp/claude-code-security.git
+git clone https://github.com/Bitsummit-Corp/claude-code-governance.git
 cd claude-code-security
 pnpm install --frozen-lockfile
 pnpm build

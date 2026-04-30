@@ -77,7 +77,7 @@ ccsec apply --profile baseline
 ### Channel 3: Raw repo (for MDM admins)
 
 ```
-git clone https://github.com/Bitsummit-Corp/claude-code-security.git
+git clone https://github.com/Bitsummit-Corp/claude-code-governance.git
 cd claude-code-security
 ./installers/macos/install.sh --profile baseline
 ```

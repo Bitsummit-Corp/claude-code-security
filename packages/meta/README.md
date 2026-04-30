@@ -33,7 +33,7 @@ ccsec doctor
 
 ## Documentation
 
-See the main repository: https://github.com/Bitsummit-Corp/claude-code-security
+See the main repository: https://github.com/Bitsummit-Corp/claude-code-governance
 
 ## License
 

@@ -12,7 +12,7 @@
 
 ## Plan 2 Sequence Position
 
-Plan 2 of 10. Predecessor: Plan 1 foundation walking skeleton (`v0.1.0-alpha.0` shipped to `https://github.com/Bitsummit-Corp/claude-code-security/releases/tag/v0.1.0-alpha.0`). Successor: Plan 3 (hooks categories 4-5: bash structural + branch guards).
+Plan 2 of 10. Predecessor: Plan 1 foundation walking skeleton (`v0.1.0-alpha.0` shipped to `https://github.com/Bitsummit-Corp/claude-code-governance/releases/tag/v0.1.0-alpha.0`). Successor: Plan 3 (hooks categories 4-5: bash structural + branch guards).
 
 ---
 
@@ -2014,7 +2014,7 @@ Plan 3 (categories 4-5: bash structural + branch guards) is next. See parent spe
 
 Report vulnerabilities to security@bitsummit.com. See SECURITY.md.
 NOTES_EOF
-gh release create v0.2.0-alpha.0 --repo Bitsummit-Corp/claude-code-security \
+gh release create v0.2.0-alpha.0 --repo Bitsummit-Corp/claude-code-governance \
   --title "v0.2.0-alpha.0 - Hooks Categories 1-3" \
   --notes-file /tmp/release-notes-v0.2.md \
   --prerelease
@@ -2024,7 +2024,7 @@ rm /tmp/release-notes-v0.2.md
 - [ ] **Step 8: Verify release**
 
 ```bash
-gh release view v0.2.0-alpha.0 --repo Bitsummit-Corp/claude-code-security 2>&1 | head -10
+gh release view v0.2.0-alpha.0 --repo Bitsummit-Corp/claude-code-governance 2>&1 | head -10
 ```
 
 Plan 2 sealed.

@@ -47,7 +47,7 @@ The raw-repo channel for MDM admins continues to work via `installers/macos/inst
   - version: 0.6.0-beta.0
   - description: Open-source Claude Code hardening reference. 26 hooks across secrets, destructive ops, sensitive paths, bash structural, branch guards, network egress, audit, behavioral, MDM bypass, agent gating.
   - publisher: BITSUMMIT-Corp
-  - repository: https://github.com/Bitsummit-Corp/claude-code-security
+  - repository: https://github.com/Bitsummit-Corp/claude-code-governance
   - commands: `[{ name: 'ccsec', description: 'Apply BITSUMMIT Hardening profile' }]`
 - Create `packages/plugin/commands/ccsec.md` defining the `/ccsec` slash command (delegates to `ccsec apply --profile <arg>` from the CLI).
 - Run `pnpm install` to register the workspace.
@@ -163,7 +163,7 @@ Commit: `docs: changelog v0.6.0-beta.0`
 git tag -a v0.6.0-beta.0 -m "v0.6.0-beta.0: plugin + npm distribution channels"
 git push origin main
 git push origin v0.6.0-beta.0
-gh release create v0.6.0-beta.0 --repo Bitsummit-Corp/claude-code-security --title "v0.6.0-beta.0 - Plugin + npm Distribution" --notes-file <notes> --prerelease
+gh release create v0.6.0-beta.0 --repo Bitsummit-Corp/claude-code-governance --title "v0.6.0-beta.0 - Plugin + npm Distribution" --notes-file <notes> --prerelease
 ```
 
 Plan 6 sealed.

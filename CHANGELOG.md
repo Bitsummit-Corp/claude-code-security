@@ -4,12 +4,15 @@ All notable changes to this project will be documented here. Format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+- **2026-04-29 14:42** Redacted real prospect / client names from all public docs. Replaced specific organization names with anonymized candidate profiles (regulated municipal / law-enforcement Windows-heavy; regulated forensics / public-safety mixed-fleet; federally-regulated Mac-heavy research org). Specific candidate names are now tracked privately by the maintainer. Affected: `docs/pilot-validation.md`, `docs/v1.0.0-readiness.md`, `docs/external-security-review-rfp.md`, `docs/superpowers/plans/2026-04-29-phase1-plan10-pilot-validation.md`, `docs/superpowers/specs/2026-04-29-plan10-pilot-validation.md`, `docs/superpowers/specs/2026-04-29-claude-code-security-repo-design.md`, and the prior `[0.9.0-rc.2]` Added entry.
+
 ## [0.9.0-rc.2] - 2026-04-29
 
 This is a **release candidate**. Plans 1-9 of 10 are shipped; Plan 10 (pilot validation) is user-action and gates `v1.0.0`.
 
 ### Added
-- `docs/pilot-validation.md`: canonical pilot runbook covering candidate clients (a regulated municipal agency, a regional law-enforcement service, a federally-regulated research organization), pilot criteria, four-phase rollout (kickoff / rollout / hardening / signoff), v1.0.0 readiness checklist, friction-log template inline, and internal incident drill template inline.
+- `docs/pilot-validation.md`: canonical pilot runbook covering candidate-client profiles (specific names tracked privately by the maintainer), pilot criteria, four-phase rollout (kickoff / rollout / hardening / signoff), v1.0.0 readiness checklist, friction-log template inline, and internal incident drill template inline.
 - `docs/external-security-review-rfp.md`: Request-for-Proposal template the maintainer sends to security firms (Trail of Bits, NCC Group, Doyensec, Cure53, Atredis, Include Security). Includes scope (in / out), deliverables, timeline, budget guidance, and a 10-question engagement Q&A template.
 - `docs/pilot-templates/agreement.md`: pilot agreement template with explicit `[FILL]` markers and counsel-disclaimer.
 - `docs/pilot-templates/friction-log.md`: running friction-log template with severity definitions (P0 / P1 / P2), status values, weekly check-in summaries, and v1.0.0 aggregate gating logic.

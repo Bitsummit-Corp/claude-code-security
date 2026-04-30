@@ -4,7 +4,7 @@
   "version": "0.6.0-beta.0",
   "description": "Open-source Claude Code hardening reference. 26 hooks across secrets, destructive ops, sensitive paths, bash structural, branch guards, network egress, audit, behavioral, MDM bypass, agent gating.",
   "publisher": "BITSUMMIT-Corp",
-  "repository": "https://github.com/Bitsummit-Corp/claude-code-security",
+  "repository": "https://github.com/Bitsummit-Corp/claude-code-governance",
   "commands": [
     { "name": "ccsec", "description": "Apply BITSUMMIT Hardening profile" }
   ]

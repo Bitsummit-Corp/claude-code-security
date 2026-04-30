@@ -189,7 +189,7 @@ git push origin main
 git push origin v0.4.0-alpha.0
 ```
 
-Then `gh release create v0.4.0-alpha.0 --repo Bitsummit-Corp/claude-code-security --title "v0.4.0-alpha.0 - Network Egress + Audit Hardening" --notes-file <notes> --prerelease`. Notes summarize the 4 hooks, audit-logger hardening, and threats covered.
+Then `gh release create v0.4.0-alpha.0 --repo Bitsummit-Corp/claude-code-governance --title "v0.4.0-alpha.0 - Network Egress + Audit Hardening" --notes-file <notes> --prerelease`. Notes summarize the 4 hooks, audit-logger hardening, and threats covered.
 
 Plan 4 sealed.
 

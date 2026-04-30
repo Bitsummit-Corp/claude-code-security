@@ -33,7 +33,7 @@ The artifacts referenced below are **templates** in this release. Their full imp
 On the build host:
 
 ```
-git clone https://github.com/Bitsummit-Corp/claude-code-security.git
+git clone https://github.com/Bitsummit-Corp/claude-code-governance.git
 cd claude-code-security
 pnpm install --frozen-lockfile
 pnpm build
@@ -244,4 +244,4 @@ On Ubuntu / Debian with AppArmor, the same principle applies: the Claude Code Ap
 - v1.2: ship `install-managed.sh`, `verify-managed.sh`, the Ansible role, and `.deb` / `.rpm` packaging.
 - v1.x: SELinux policy module; AppArmor profile snippet; systemd unit for read-only bind-mount of `/etc/ClaudeCode`.
 
-Issues and design feedback welcome at [github.com/Bitsummit-Corp/claude-code-security/issues](https://github.com/Bitsummit-Corp/claude-code-security/issues).
+Issues and design feedback welcome at [github.com/Bitsummit-Corp/claude-code-governance/issues](https://github.com/Bitsummit-Corp/claude-code-governance/issues).

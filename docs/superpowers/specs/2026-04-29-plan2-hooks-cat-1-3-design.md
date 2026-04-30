@@ -218,4 +218,4 @@ The ADR explains alternatives considered (e.g., always-record severity, full glo
 
 - [Parent spec](./2026-04-29-claude-code-security-repo-design.md)
 - [Plan 1 plan doc](../plans/2026-04-29-phase1-plan1-foundation-walking-skeleton.md)
-- [v0.1.0-alpha.0 release](https://github.com/Bitsummit-Corp/claude-code-security/releases/tag/v0.1.0-alpha.0)
+- [v0.1.0-alpha.0 release](https://github.com/Bitsummit-Corp/claude-code-governance/releases/tag/v0.1.0-alpha.0)

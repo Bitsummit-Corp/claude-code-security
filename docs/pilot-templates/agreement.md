@@ -11,7 +11,7 @@
 
 ## Subject
 
-The Provider grants the Pilot Client a no-charge license to deploy `claude-code-security` (the "Software") to up to `[FILL]` endpoints during the Pilot Window. The Software is the open-source project at `https://github.com/Bitsummit-Corp/claude-code-security`, licensed under MIT, deployed via the Pilot Client's existing MDM (Jamf, Intune, or Ansible).
+The Provider grants the Pilot Client a no-charge license to deploy `claude-code-security` (the "Software") to up to `[FILL]` endpoints during the Pilot Window. The Software is the open-source project at `https://github.com/Bitsummit-Corp/claude-code-governance`, licensed under MIT, deployed via the Pilot Client's existing MDM (Jamf, Intune, or Ansible).
 
 ## Pilot Scope
 

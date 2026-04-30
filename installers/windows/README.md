@@ -27,7 +27,7 @@ The artifacts referenced below are **templates** in this release. Their full Pow
 On the build host:
 
 ```
-git clone https://github.com/Bitsummit-Corp/claude-code-security.git
+git clone https://github.com/Bitsummit-Corp/claude-code-governance.git
 cd claude-code-security
 pnpm install --frozen-lockfile
 pnpm build
@@ -179,4 +179,4 @@ ADR-0006 documents why we chose Configuration Profile + companion script for mac
 - v1.2: optional MSI distribution for environments that prefer MSI over Win32 app.
 - v1.x: ADMX template once a registry-shape configuration model is upstreamed.
 
-Issues and design feedback welcome at [github.com/Bitsummit-Corp/claude-code-security/issues](https://github.com/Bitsummit-Corp/claude-code-security/issues).
+Issues and design feedback welcome at [github.com/Bitsummit-Corp/claude-code-governance/issues](https://github.com/Bitsummit-Corp/claude-code-governance/issues).

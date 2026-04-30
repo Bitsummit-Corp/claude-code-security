@@ -4,7 +4,7 @@ This is a template the maintainer uses to solicit a paid third-party security re
 
 ## Project overview
 
-`claude-code-security` (also distributed as `@bitsummit/claude-code-security` on npm and as the `bitsummit/hardening` Claude Code plugin) is an open-source hardening reference for Anthropic's Claude Code CLI. It ships 26 PreToolUse / PostToolUse / SubagentStart / SubagentStop hooks, three layered settings profiles (`baseline`, `strict`, `regulated`), behavioral CLAUDE.md rules, and OS-specific MDM deployment installers (macOS Jamf, Windows Intune, Linux Ansible / .deb / .rpm). It targets two audiences: individual developers hardening their own install, and IT admins deploying a vetted policy to a regulated fleet via MDM. The project is at `v0.9.0-rc.2` as of this RFP; `v1.0.0` ships once a pilot validation and this external review complete. Source: `https://github.com/Bitsummit-Corp/claude-code-security`.
+`claude-code-security` (also distributed as `@bitsummit/claude-code-security` on npm and as the `bitsummit/hardening` Claude Code plugin) is an open-source hardening reference for Anthropic's Claude Code CLI. It ships 26 PreToolUse / PostToolUse / SubagentStart / SubagentStop hooks, three layered settings profiles (`baseline`, `strict`, `regulated`), behavioral CLAUDE.md rules, and OS-specific MDM deployment installers (macOS Jamf, Windows Intune, Linux Ansible / .deb / .rpm). It targets two audiences: individual developers hardening their own install, and IT admins deploying a vetted policy to a regulated fleet via MDM. The project is at `v0.9.0-rc.2` as of this RFP; `v1.0.0` ships once a pilot validation and this external review complete. Source: `https://github.com/Bitsummit-Corp/claude-code-governance`.
 
 ## Engagement scope
 
@@ -105,7 +105,7 @@ The firm fills this out before signing the SOW. Replies under 150 words per ques
    (We respect strong arguments to expand or contract scope.)
 
 10. Do you have any conflicts of interest with Anthropic, BITSUMMIT, or the candidate
-    pilot clients (a regulated municipal agency, a regional law-enforcement service, a federally-regulated research organization)?
+    pilot clients? (Specific client names disclosed under NDA on engagement.)
 ```
 
 ## Submission

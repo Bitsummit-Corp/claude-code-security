@@ -162,5 +162,5 @@ After Plan 5, threats T-001 through T-018 are all documented; mitigations exist 
 
 - [Parent spec](./2026-04-29-claude-code-security-repo-design.md)
 - [Plan 4 plan](../plans/2026-04-29-phase1-plan4-hooks-cat-6-7.md)
-- [v0.4.0-alpha.0 release](https://github.com/Bitsummit-Corp/claude-code-security/releases/tag/v0.4.0-alpha.0)
+- [v0.4.0-alpha.0 release](https://github.com/Bitsummit-Corp/claude-code-governance/releases/tag/v0.4.0-alpha.0)
 - [anthropics/claude-code#26637](https://github.com/anthropics/claude-code/issues/26637) - the `disableAllHooks` MDM bypass

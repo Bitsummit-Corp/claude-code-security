@@ -1,6 +1,6 @@
 # Security Advisory Template
 
-Use this template when filing a private security advisory at <https://github.com/Bitsummit-Corp/claude-code-security/security/advisories>. Sections marked **(maintainer)** are filled in during triage; reporters complete the rest.
+Use this template when filing a private security advisory at <https://github.com/Bitsummit-Corp/claude-code-governance/security/advisories>. Sections marked **(maintainer)** are filled in during triage; reporters complete the rest.
 
 ## Summary
 

@@ -197,4 +197,4 @@ Coverage matrix updated.
 
 - [Parent spec](./2026-04-29-claude-code-security-repo-design.md)
 - [Plan 3 plan](../plans/2026-04-29-phase1-plan3-hooks-cat-4-5.md)
-- [v0.3.0-alpha.0 release](https://github.com/Bitsummit-Corp/claude-code-security/releases/tag/v0.3.0-alpha.0)
+- [v0.3.0-alpha.0 release](https://github.com/Bitsummit-Corp/claude-code-governance/releases/tag/v0.3.0-alpha.0)

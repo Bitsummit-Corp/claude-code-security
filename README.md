@@ -6,7 +6,7 @@
 [![Threat coverage](https://img.shields.io/badge/threat%20coverage-18%2F18-success)](./docs/threat-model.md)
 [![OpenSSF Scorecard](https://img.shields.io/badge/OpenSSF%20Scorecard-pending%20v1.0.0-lightgrey)](./docs/superpowers/plans/)
 
-> **Status:** Release candidate (`v0.9.0-rc.2`). Plans 1-9 of 10 shipped. The project is feature-complete (26 hooks, 18 threats, 313 tests) and infrastructure-complete (SBOM, GHSA pipeline, SEA binary build templates, SHA256SUMS, release runbook). **Plan 10 is user-action**: pilot validation and external security review. `v1.0.0` ships when the maintainer completes Plan 10. See [docs/v1.0.0-readiness.md](./docs/v1.0.0-readiness.md).
+> **Status:** Release candidate (`v0.9.0-rc.2`). Plans 1-9 of 10 shipped. The project is feature-complete (26 hooks, 18 threats, 313 tests) and infrastructure-complete (SBOM, GHSA pipeline, SEA binary build templates, SHA256SUMS, release runbook). **Plan 10 is user-action**: pilot validation. `v1.0.0` ships when the maintainer completes Plan 10. See [docs/v1.0.0-readiness.md](./docs/v1.0.0-readiness.md).
 
 Open-source hardening reference for Anthropic's Claude Code. Ships hooks, layered settings templates, behavioral CLAUDE.md rules, and OS-specific installers so individual developers can harden their own installs and IT admins can deploy a vetted policy via MDM.
 

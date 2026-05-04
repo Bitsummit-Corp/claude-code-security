@@ -39,7 +39,7 @@ The 313-test suite passes because every test layer exercises the producer side i
 
 ### How to evaluate the project today
 
-If you want to read the threat model, the deployment runbooks, the macOS installer scripts, the hook source, and the engagement template, all of that is shipped and useful as reference material. If you want to install the hooks against a live Claude Code session, wait for `v0.9.0-rc.3`. Watch the [release feed](https://github.com/jwtor7/claude-code-governance/releases) for the rc.3 announcement.
+If you want to read the threat model, the deployment runbooks, the macOS installer scripts, the hook source, and the engagement template, all of that is shipped and useful as reference material. If you want to install the hooks against a live Claude Code session, wait for `v0.9.0-rc.3`. Watch the [release feed](https://github.com/Bitsummit-Corp/claude-code-governance/releases) for the rc.3 announcement.
 
 ### Acknowledgement
 
@@ -121,7 +121,7 @@ ccsec apply --profile baseline
 ### Channel 3: Raw repo (for MDM admins)
 
 ```
-git clone https://github.com/jwtor7/claude-code-governance.git
+git clone https://github.com/Bitsummit-Corp/claude-code-governance.git
 cd claude-code-governance
 ./installers/macos/install.sh --profile baseline
 ```

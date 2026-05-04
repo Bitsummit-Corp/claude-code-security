@@ -27,7 +27,9 @@ Net runtime effect on rc.2: hook-layer enforcement is 0/26 (defect 1), deny-laye
 
 ### Why the test suite did not catch this
 
-The 313-test suite passes because every test layer exercises the producer side in isolation. Unit tests assert on the compiler's own output shape. Snapshot tests compare a checked-in compiled artifact to itself. Integration tests preload hook modules into an in-process `runHooks()` call instead of writing a real `~/.claude/settings.json` and spawning a Claude Code session. No test exists in the repository today that asks the question that matters: will Claude Code accept this file and invoke these hooks? That gap is the structural cause of all four defects above. Closing it requires adding a harness-contract test layer, not adding more unit tests.
+The 313-test suite passes because every test layer exercises the producer side in isolation. Unit tests assert on the compiler's own output shape. Snapshot tests compare a checked-in compiled artifact to itself. Integration tests preload hook modules into an in-process `runHooks()` call instead of writing a real `~/.claude/settings.json` and spawning a Claude Code session. No test exists in the repository today that asks the question that matters: will Claude Code accept this file and invoke these hooks? That gap is the structural cause of all four defects above.
+
+Closing this gap requires adding a harness-contract test layer, not just adding more unit tests.
 
 ### What is being done
 

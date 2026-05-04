@@ -4,6 +4,9 @@ All notable changes to this project will be documented here. Format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+- **2026-05-04 00:43** Sharpened the "Why the test suite did not catch this" punchline: split the closing sentence into its own paragraph, and tightened "Closing it requires adding a harness-contract test layer, not adding more unit tests" to "Closing this gap requires adding a harness-contract test layer, not just adding more unit tests". Affected: `README.md`.
+
 ### Added
 - **2026-05-04 00:38** `CLAUDE.md` repo-level guide for AI assistants (Claude Code and similar). Documents project shape, the v0.9.0-rc.2 known-defects status, the compile / hook-contract / threat-model / test-layer architecture, build-and-test commands (with the CI ordering rationale), the compiled-artifact placeholder-home convention, and the ten-place version surface. Composes via `@CONTRIBUTING.md` and `@OWNERS.md` imports rather than duplicating their content. Affected: `CLAUDE.md` (new).
 

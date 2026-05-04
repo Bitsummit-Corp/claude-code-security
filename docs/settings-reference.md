@@ -95,7 +95,7 @@ Hooks that run when a subagent stops. Used for session summarization (`audit-ses
 
 ## Hook entry shape
 
-Each hook entry is a single-key object: `{ "name": "<hook-name>" }`. The runner looks up the hook's manifest (`packages/hooks/src/<hook-name>/index.ts`) and uses its declared:
+Each hook entry is a single-key object: `{ "name": "<hook-name>" }`. The runner looks up the hook's manifest (`archive/hooks-rc2/<hook-name>/index.ts` in the v0.1.0 reset state) and uses its declared:
 
 - `event`: must match the parent key in `hooks.<event>[]` (compiler rejects mismatches).
 - `matchers`: tool name patterns the hook fires on. The runner short-circuits if the current tool name does not match any pattern.

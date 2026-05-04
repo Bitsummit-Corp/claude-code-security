@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented here. Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [SemVer](https://semver.org/) with a security-tightening carve-out (see SECURITY.md).
 
+## [v0.1.0] — 2026-05-04
+
+Scope reset. The inherited `v0.9.0-rc.x` line was retired and the project restarted at `v0.1.0`. This is not a feature release; it is an honest reset of the repo's claims to match what the code actually does (nothing, at runtime).
+
+### Removed
+- `v0.9.0-rc.x` as the active release line. The `rc.3 → pilot → v1.0.0` roadmap was not viable in one wave (four critical defects + harness-contract test gate + pilot validation + signing infrastructure in one milestone). It has been replaced by an `M1 → M2 → M3 → M4` cadence with one capability per milestone (see README "Scope reset (May 2026)"). No dates, no rc tags, no `v1.0.0` reference in the active roadmap.
+- The "Plans 1-9 shipped, feature-complete and infrastructure-complete" framing, residual mentions of which had been retained through rc.2.
+- Cross-platform installer claims that were never validated (Windows Intune templates, Linux Ansible / `.deb` / `.rpm` templates). These were template-only under the rc.x line and are deferred until at least one platform passes a real harness-contract test.
+- "26 hooks across 3 profiles" framing. Hook count is the wrong unit; calibrated detections validated against the real harness are the unit.
+
+### Changed
+- `packages/hooks/src/` moved to `archive/hooks-rc2/`. The 26 retired hook implementations are preserved as reference material; `packages/hooks/src/` no longer exists. The visual signal of the move is intentional. See `archive/hooks-rc2/README.md`.
+- Version bumped to `0.1.0` across all ten surfaces: root `package.json`, the seven workspace `package.json` files, `packages/plugin/.claude-plugin/plugin.json`, the `PKG_VERSION` constant in `packages/cli/src/index.ts`, the `VERSION` constant in `packages/cli/src/commands/apply.ts`, and the `ccsec_version` field in `packages/settings/base.json`. The three compiled artifacts under `packages/settings/compiled/` and the vitest snapshot at `packages/settings/__snapshots__/snapshot.test.ts.snap` were regenerated to match.
+- `README.md` rewritten. New top-level sections: "Current state: delivery layer is broken" (the four rc.2 defects preserved verbatim, reframed as ground truth for the reset), "Scope reset (May 2026)" (M1-M4 milestones), "What is actually protected today" (today, nothing), "Install" (paused), "Why this repo is non-composable, on purpose" (calibration is the work; regex tables are the artifact).
+- `CONTRIBUTING.md` and `CLAUDE.md` carry a v0.1.0 scope-reset banner. Path references to `packages/hooks/src/` updated to `archive/hooks-rc2/`. The hook-authoring body of `CONTRIBUTING.md` is preserved as historical reference for the rc.x flow; the M1+ authoring flow will be documented when it ships.
+- `scripts/gen-hook-docs.mjs` and `scripts/gen-coverage-matrix.mjs` `SRC_DIR` updated to `archive/hooks-rc2/`. The generators are not part of the v0.1.0 build flow; they are kept executable so the historical pages can be regenerated against the retired source if needed.
+- `docs/v1.0.0-readiness.md` carries a deprecation banner pointing back to the README scope reset section. Body preserved as history.
+
+### Notes
+- Build, typecheck, and tests will not pass end to end after this commit. `packages/hooks/` no longer has source; `tests/integration/_all-hooks.ts` imports from `@bitsummit/ccsec-hooks/dist/...` which is gitignored and will not regenerate without source. This is expected: the README explicitly states the runtime is broken and installation is paused. M1 will rebuild the relevant slice with a real harness-contract test rather than restoring the inherited test surface.
+- No tag was retired. `v0.9.0-rc.2` was never published to the GitHub remote (no `git tag`, no GitHub Release). The mitigation step in the reset plan (archive the rc.2 release notes before deleting the tag) was a no-op for this repo.
+- The four defects from rc.2 are preserved verbatim in `README.md` "Current state: delivery layer is broken." They are the ground truth for "the delivery layer is broken" and will only be retired when the M1 hook proves the harness contract works on at least one path.
+
+## Pre-reset history (retired)
+
+The entries below describe the retired `v0.9.0-rc.x` release line. They are preserved for lineage and incident reconstruction. None of the milestones, dates, or roadmap claims in these entries are active under v0.1.0; see the v0.1.0 entry above for the current state.
+
 ## [Unreleased]
 
 ### Changed

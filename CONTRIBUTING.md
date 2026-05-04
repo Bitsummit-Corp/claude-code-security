@@ -1,4 +1,6 @@
-# Contributing to claude-code-security
+# Contributing to claude-code-governance
+
+> **v0.1.0 scope-reset notice (2026-05-04).** The rc.x architecture has been retired and the 26 hooks moved to `archive/hooks-rc2/`. New hook authoring is paused until the M1 rebuild lands a single integration-tested hook. The "Adding a new hook" section below is preserved as historical reference for the rc.x flow; the M1+ authoring flow will be documented when it ships. See the [README scope reset section](./README.md#scope-reset-may-2026) for the current state.
 
 Thanks for considering a contribution. This project is a hardening reference for Anthropic's Claude Code CLI; small, targeted contributions land easily, and the bar for landing depends on the kind of change. This guide explains how to set up, what kinds of contributions are welcomed, and how to get a change reviewed.
 
@@ -112,20 +114,20 @@ These are enforced in part by hooks and pre-commit checks.
 
 ## Adding a new hook
 
-A hook is the unit of detection in this project. Each hook lives at `packages/hooks/src/<name>/index.ts`, declares a manifest, exports a `run(ctx)` function, and ships with a test at `packages/hooks/src/<name>/<name>.test.ts`.
+A hook is the unit of detection in this project. Each hook lives at `archive/hooks-rc2/<name>/index.ts`, declares a manifest, exports a `run(ctx)` function, and ships with a test at `archive/hooks-rc2/<name>/<name>.test.ts`.
 
 The minimum surface for a new hook:
 
 1. **Pick a threat ID.** Check `docs/threat-model.md`. If your hook addresses a documented threat (T-001 through T-018 today), reuse that ID. If it addresses a new threat, open an issue first to negotiate the next sequential ID.
-2. **Create the directory.** `packages/hooks/src/<name>/`.
+2. **Create the directory.** `archive/hooks-rc2/<name>/`.
 3. **Write the manifest.** Manifest fields: `name`, `event` (PreToolUse / PostToolUse / SubagentStart / SubagentStop), `matchers` (tool names, e.g. `["Bash"]`), `threat` (T-NNN), `severity` (scalar string or per-profile object), `profiles` (subset of `baseline`, `strict`, `regulated`), `timeout` (ms).
 4. **Write the implementation.** `run(ctx)` returns one of the standard hook results (allow / warn / block / log-only). See `packages/core/src/` for the contract types.
 5. **Write the tests.** Cover the positive case (the bypass attempt is detected), the negative case (a benign call is not flagged), and at least one boundary case.
-6. **Wire into the index.** Add the hook to `packages/hooks/src/index.ts`.
+6. **Wire into the index.** Add the hook to `archive/hooks-rc2/index.ts`.
 7. **Regenerate docs.** `pnpm gen:docs`. Verify `docs/hooks/<name>.md` exists and looks right.
 8. **Update the profile.** If your hook should ship in a profile, add it to the relevant profile under `packages/settings/profiles/`. CI snapshot tests will fail until the snapshot is updated.
 
-Tip: copy the closest existing hook as a starting point. `packages/hooks/src/secret-guard/` is a good template for input-scanning hooks; `packages/hooks/src/branch-protection-guard/` for git-related hooks; `packages/hooks/src/audit-session-summary/` for SubagentStop hooks.
+Tip: copy the closest existing hook as a starting point. `archive/hooks-rc2/secret-guard/` is a good template for input-scanning hooks; `archive/hooks-rc2/branch-protection-guard/` for git-related hooks; `archive/hooks-rc2/audit-session-summary/` for SubagentStop hooks.
 
 ## Adding a new threat
 

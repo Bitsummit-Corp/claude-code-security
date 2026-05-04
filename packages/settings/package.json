@@ -1,6 +1,6 @@
 {
   "name": "@bitsummit/ccsec-settings",
-  "version": "0.9.0-rc.2",
+  "version": "0.1.0",
   "type": "module",
   "files": ["base.json", "overlays", "profiles", "compiled"],
   "scripts": {

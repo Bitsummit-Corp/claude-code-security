@@ -8,11 +8,11 @@ Open-source hardening reference for Anthropic's Claude Code CLI. pnpm workspace 
 
 The canonical repo is `https://github.com/Bitsummit-Corp/claude-code-governance`. `OWNERS.md` is the source of truth for project ownership; do not substitute a fork URL into docs even when the local `origin` remote points elsewhere.
 
-## Critical: v0.9.0-rc.2 status
+## Critical: v0.1.0 scope-reset state (2026-05-04)
 
-The current tag ships with four known harness-contract defects documented in [README.md](./README.md) under "Known defects in v0.9.0-rc.2": hooks do not fire, audit log not written, `permissions.deny` dropped on session load, WebFetch deny patterns rejected. The 313-test suite passes because no test layer exercises the contract between the emitted `~/.claude/settings.json` and the Claude Code harness.
+The rc.x line has been retired. Tag history below `v0.1.0` is preserved for context but is no longer the active release line. The 26 hooks from rc.2 have been moved to `archive/hooks-rc2/`; `archive/hooks-rc2/` no longer exists. The four harness-contract defects that drove the reset (hooks do not fire, audit log not written, `permissions.deny` dropped on session load, WebFetch deny patterns rejected) are documented in `README.md` under "Current state: delivery layer is broken." See `README.md` "Scope reset (May 2026)" for the M1-M4 milestones that replace the rc.3 -> v1.0.0 path.
 
-Do not claim the project enforces protections at runtime on rc.2. The hook source, threat model, settings overlays, and documentation are useful as reference material; the runtime is not enforcing them. Any new claim about runtime behavior needs a harness-contract test to back it up.
+Do not claim the project enforces protections at runtime. The hook source in `archive/hooks-rc2/`, the threat model, settings overlays, and documentation are useful as reference material; the runtime is not enforcing them. Any new claim about runtime behavior needs an integration test against the real Claude Code harness on a named OS, not the in-process runner. The compile / build / typecheck pipeline below was written for the rc.x layout and will fail end-to-end after the directory move; M1 will rebuild the relevant slice.
 
 ## Composable references
 
@@ -36,7 +36,7 @@ Both `ccsec compile` and `ccsec apply` call `compileProfile()` in `packages/cli/
 
 ### Hook contract
 
-Each hook is a directory under `packages/hooks/src/<name>/` with an `index.ts` exporting a manifest plus a `run(ctx)` function. Manifest fields: `name`, `event`, `matchers`, `threat`, `severity` (scalar or per-profile record), `profiles`, `timeout_ms`. `packages/core/src/runner.ts` is the in-process runner used by tests; the Claude Code harness does not call it in rc.2.
+Each hook is a directory under `archive/hooks-rc2/<name>/` with an `index.ts` exporting a manifest plus a `run(ctx)` function. Manifest fields: `name`, `event`, `matchers`, `threat`, `severity` (scalar or per-profile record), `profiles`, `timeout_ms`. `packages/core/src/runner.ts` is the in-process runner used by tests; the Claude Code harness does not call it in rc.2.
 
 ### Threat model and coverage
 
@@ -44,7 +44,7 @@ Each hook is a directory under `packages/hooks/src/<name>/` with an `index.ts` e
 
 ### Test layers
 
-- **Unit:** `packages/<pkg>/tests/*.test.ts` and `packages/hooks/src/<name>/<name>.test.ts`.
+- **Unit:** `packages/<pkg>/tests/*.test.ts` and `archive/hooks-rc2/<name>/<name>.test.ts`.
 - **Snapshot:** `packages/settings/snapshot.test.ts` compares each `compiled/<profile>.json` against the vitest snapshot.
 - **Integration:** `tests/integration/*.test.ts` (in-process runner, not real Claude Code).
 - **Bats:** `installers/macos/`.

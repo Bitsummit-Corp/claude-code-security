@@ -3,7 +3,7 @@ import { compileCommand } from './commands/compile.js';
 import { applyCommand } from './commands/apply.js';
 import { doctorCommand } from './commands/doctor.js';
 
-const PKG_VERSION = '0.9.0-rc.2';
+const PKG_VERSION = '0.1.0';
 const SETTINGS_ROOT_DEFAULT = new URL('../../settings', import.meta.url).pathname;
 const detectOs = (): 'macos' | 'linux' | 'windows' =>
   process.platform === 'darwin' ? 'macos' : process.platform === 'win32' ? 'windows' : 'linux';

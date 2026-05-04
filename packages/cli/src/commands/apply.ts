@@ -18,7 +18,7 @@ export interface ApplyCommandArgs {
 }
 
 interface Lockfile { profile: string; ccsec_version: string; applied_at: string; settings_sha256: string; }
-const VERSION = '0.1.0-alpha.0';
+const VERSION = '0.9.0-rc.2';
 const sha256 = (s: string) => createHash('sha256').update(s).digest('hex');
 
 const DEFAULT_RULES_ROOT = fileURLToPath(new URL('../../../rules/templates', import.meta.url));

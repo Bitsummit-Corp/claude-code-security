@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "ccsec_version": "0.1.0-alpha.0",
+  "ccsec_version": "0.9.0-rc.2",
   "audit": { "log_path": "${HOME}/.claude/ccsec-audit.jsonl" },
   "permissions": { "deny": [], "allow": [] },
   "hooks": { "PreToolUse": [], "PostToolUse": [], "UserPromptSubmit": [], "SessionStart": [] }

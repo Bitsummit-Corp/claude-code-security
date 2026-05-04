@@ -111,9 +111,9 @@ For the full list with vector / detection status / recommended response, see [`d
 /ccsec apply baseline
 ```
 
-### Channel 2: npm (for CI use, non-plugin contexts)
+### Channel 2: npm (for CI use, non-plugin contexts) - Not Yet Functional (packaging fix lands in rc.3)
 
-The npm package name still uses the project's original name `claude-code-security`; rename to `claude-code-governance` is pending `v1.0.0`. Both names refer to the same project.
+The published `@bitsummit/claude-code-security` umbrella package ships only `package.json` and `README.md`; the `ccsec` binary lives in the `@bitsummit/ccsec-cli` workspace package and is not yet exposed through the umbrella. Use Channel 1 (plugin) once published, or Channel 3 (raw repo clone) until rc.3. The npm package name still uses the project's original name `claude-code-security`; rename to `claude-code-governance` is pending `v1.0.0`. Both names refer to the same project.
 
 ```
 npm i -g @bitsummit/claude-code-security

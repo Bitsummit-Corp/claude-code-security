@@ -29,14 +29,14 @@ Both `ccsec compile` and `ccsec apply` call `compileProfile()` in `packages/cli/
 2. Read each overlay listed in `packages/settings/profiles/<profile>.json` `extends[]`.
 3. Deep-merge top-level objects so overlays append to `permissions.deny`, `hooks.<event>`, etc.
 4. Apply `profile.overrides`.
-5. Resolve path tokens (`${HOME}`, `${SSH}`, `${AWS}`, `${KUBE}`, `${TMP}`, `${KEYS}`) via `packages/core/src/path-tokens.ts`.
+5. Resolve path tokens (`${HOME}`, `${SSH}`, `${AWS}`, `${TMP}`, `${KEYS}`) via `packages/core/src/path-tokens.ts`.
 6. If `--target managed`, strip the `threat` field from deny entries.
 
 `apply` then writes `~/.claude/settings.json` plus a sha256-stamped `.ccsec-lock.json` and (with `--rules`) installs the profile's `CLAUDE.md` template from `packages/rules/templates/`.
 
 ### Hook contract
 
-Each hook is a directory under `packages/hooks/src/<name>/` with an `index.ts` exporting a manifest plus a `run(ctx)` function. Manifest fields: `name`, `event`, `matchers`, `threat`, `severity` (scalar or per-profile record), `profiles`, `timeout`. `packages/core/src/runner.ts` is the in-process runner used by tests; the Claude Code harness does not call it in rc.2.
+Each hook is a directory under `packages/hooks/src/<name>/` with an `index.ts` exporting a manifest plus a `run(ctx)` function. Manifest fields: `name`, `event`, `matchers`, `threat`, `severity` (scalar or per-profile record), `profiles`, `timeout_ms`. `packages/core/src/runner.ts` is the in-process runner used by tests; the Claude Code harness does not call it in rc.2.
 
 ### Threat model and coverage
 

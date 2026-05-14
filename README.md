@@ -1,141 +1,83 @@
-# claude-code-security
+# claude-code-governance
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![Version](https://img.shields.io/badge/version-0.9.0--rc.2-orange)](./CHANGELOG.md)
-[![Hooks](https://img.shields.io/badge/hooks-26-success)](./docs/coverage-matrix.md)
-[![Threat coverage](https://img.shields.io/badge/threat%20coverage-18%2F18-success)](./docs/threat-model.md)
-[![OpenSSF Scorecard](https://img.shields.io/badge/OpenSSF%20Scorecard-pending%20v1.0.0-lightgrey)](./docs/superpowers/plans/)
+[![Version](https://img.shields.io/badge/version-0.1.0-lightgrey)](./CHANGELOG.md)
+[![Status](https://img.shields.io/badge/status-reference%20%E2%80%94%20under%20reconstruction-lightgrey)](#scope-reset-may-2026)
 
-> **Status:** Release candidate (`v0.9.0-rc.2`). Plans 1-9 of 10 shipped. The project is feature-complete (26 hooks, 18 threats, 313 tests) and infrastructure-complete (SBOM, GHSA pipeline, SEA binary build templates, SHA256SUMS, release runbook). **Plan 10 is user-action**: pilot validation. `v1.0.0` ships when the maintainer completes Plan 10. See [docs/v1.0.0-readiness.md](./docs/v1.0.0-readiness.md).
+> **v0.1.0 is a reset, not a release of new functionality.** This repo was inherited under a `v0.9.0-rc.x` line that read like a working hardening kit one release away from `v1.0.0`. Independent review confirmed the delivery layer is broken end to end (see "Current state" below). Rather than wave through another rc, the architecture is being narrowed to one capability at a time. The retired `rc.x` line is preserved as reference material under `archive/`. Installation is paused; there is no working binary to ship right now. If you arrived expecting a download, see [Scope reset](#scope-reset-may-2026) for what is actually being built.
 
-Open-source hardening reference for Anthropic's Claude Code. Ships hooks, layered settings templates, behavioral CLAUDE.md rules, and OS-specific installers so individual developers can harden their own installs and IT admins can deploy a vetted policy via MDM.
+This repository is reference material for hardening Anthropic's Claude Code via hooks, settings overlays, and behavioral CLAUDE.md rules. It is not a turnkey kit. The 26 hooks under `archive/hooks-rc2/` are TypeScript implementations of patterns that were never validated against the real Claude Code harness contract; the v0.1.0 work is to validate one of those patterns end to end before doing anything else.
 
-## v1.0.0 path
+## Current state: delivery layer is broken
 
-`v1.0.0` is gated on two user-action items the maintainer drives, not Claude Code:
+Four functional defects were identified in live testing on Ubuntu 24.04 with Claude Code 2.1.123. They are root causes, not edge cases. Each was independently confirmed against the source. Status will not change until the rebuild milestones below ship.
 
-1. **Pilot validation** with a real regulated client - see [docs/pilot-validation.md](./docs/pilot-validation.md) for the six-week runbook.
-2. **Release-signing secrets provisioned** (PGP, npm token, Apple Developer ID, optional Windows EV) - see [docs/v1.0.0-readiness.md](./docs/v1.0.0-readiness.md) for the full checklist.
+1. **Hooks do not fire.** The compiler emits hook entries as `{"name": "<hook-name>"}`. The Claude Code harness requires `{"matcher": "...", "hooks": [{"type": "command", "command": "..."}]}` and silently drops entries it cannot parse. Source: [`packages/cli/src/compiler.ts:16`](./packages/cli/src/compiler.ts) plus [`packages/cli/src/commands/apply.ts`](./packages/cli/src/commands/apply.ts).
 
-Adopters that need extended security governance beyond the open-source defaults (custom-profile compilation, SIEM integration, compliance-regime mapping, training) can engage BITSUMMIT directly - see [docs/bitsummit-security-engagement.md](./docs/bitsummit-security-engagement.md).
+2. **Audit log is not written from production sessions.** The CLI registers no `run-hook` subcommand, so the harness has no entry point to invoke after applying settings. The runner that calls `AuditLogger.write()` is reachable only from in-process tests. Source: [`packages/cli/src/index.ts`](./packages/cli/src/index.ts), [`packages/cli/src/commands/`](./packages/cli/src/commands/).
 
-The full Plan 1 through Plan 10 sequence is at [`docs/superpowers/plans/`](./docs/superpowers/plans/).
+3. **All `permissions.deny` entries are dropped on session load.** The compiler emits deny rules as `{pattern, threat}` objects; the harness requires plain strings and removes object entries with `Non-string value in deny array was removed`. Coverage of T-001 through T-018 at the deny layer is currently 0/18. Source: [`packages/cli/src/compiler.ts:15`](./packages/cli/src/compiler.ts) (deny shape declared), [`packages/cli/src/compiler.ts:111-113`](./packages/cli/src/compiler.ts) (`stripThreatField` still emits objects), [`packages/cli/src/commands/apply.ts:42`](./packages/cli/src/commands/apply.ts) (`apply` channel passes `stripThreatField: false`).
 
-## Table of Contents
+4. **WebFetch deny patterns are skipped.** Patterns shipped as `WebFetch(*pastebin.com*)` use a glob form the harness rejects with `WebFetch permissions must use 'domain:' prefix`. The four egress-target hosts the project most directly defends against (T-005) are unenforced. Source: [`packages/settings/overlays/network-egress.json:4-7`](./packages/settings/overlays/network-egress.json).
 
-- [v1.0.0 path](#v100-path)
-- [What's protected / What's not](#whats-protected--whats-not)
-- [Install](#install)
-- [Profile Chooser](#profile-chooser)
-- [Documentation tracks](#documentation-tracks)
-- [License](#license)
-- [Security](#security)
+Net runtime effect today: hook-layer enforcement is 0/26 (defect 1), deny-layer enforcement is 0/18 (defect 3), and the audit log is empty (defect 2). The retired hook source, settings overlays, and threat model remain useful as reference material; the runtime is not enforcing them.
 
-## What's protected / What's not
+### Why the inherited test suite did not catch this
 
-We publish detection gaps openly. The signal-to-noise ratio of this repo depends on operators trusting the documented coverage; "we catch everything" claims train operators to stop thinking.
+The 313-test suite passes because every test layer exercises the producer side in isolation. Unit tests assert on the compiler's own output shape. Snapshot tests compare a checked-in compiled artifact to itself. Integration tests preload hook modules into an in-process `runHooks()` call instead of writing a real `~/.claude/settings.json` and spawning a Claude Code session. No test exists in the repository today that asks the question that matters: will Claude Code accept this file and invoke these hooks?
 
-**Protected** (covered by hooks + settings + behavioral rules):
+Closing this gap requires adding a harness-contract test layer, not just adding more unit tests. That is the central work item for M1.
 
-- Secret leak via Bash, MCP input, tool output, env-dump, keychain CLI.
-- Destructive filesystem ops (`rm -rf /`, `mkfs`, `dd`, dotfile rewrites).
-- Credential file reads (`~/.ssh`, `~/.aws`, `~/.gnupg`, `~/.kube`, `~/.docker`).
-- Branch sabotage (force push, hard reset, `--no-verify`, amend on pushed commits, history rewrite).
-- Network exfil via WebFetch and Bash (`curl`, `wget`, `fetch`) with deny-by-default allowlist.
-- Pipe-to-shell remote execution (`curl | bash` and shape-equivalents).
-- Prompt injection from tool output (CLAUDE.md validation, untrusted-content tagging, behavioral rules).
-- Subagent escape (allowlist + spawn guard + Task tool input scan).
-- MDM bypass via `disableAllHooks` (passive detection per ADR-0003).
-- Audit log tampering (sha256 hash chain).
-- Supply chain via submodule injection.
+## Scope reset (May 2026)
 
-**Not fully protected** (documented gaps; see [docs/known-bypasses.md](./docs/known-bypasses.md)):
+The inherited `rc.3 → pilot → v1.0.0` roadmap assumed one wave of fixes would land a production-ready release: four critical defects, a harness-contract test layer, pilot validation, and signing infrastructure all in one milestone. That is not realistic. The project is being narrowed to one capability at a time, with each milestone deliberately small enough to ship without a roadmap.
 
-- Heredoc bodies are not parsed; semicolons and command substitution inside heredocs are not flagged at the structural layer.
-- Pipe-to-interpreter (`| python -c`, `| node -e`, `| perl -e`) is out of scope for `pipe-to-shell-guard`; rely on `bash-egress-guard` for the curl half.
-- Obfuscated git via shell aliases or function wrappers is not detected; the hook matches the literal `git` CLI.
-- Filesystem hardlinks and bind mounts that alias credential dirs to benign paths are not detected; rely on TCC / AppArmor / DAC at the OS layer.
-- Cross-process audit log writes can produce false-positive tamper alerts; per-PID audit files are deferred to a post-v1.0 plan.
+- **M1 — One hook, one platform, one secret pattern.** A single `PreToolUse` hook on macOS that blocks one regex-detectable secret pattern (e.g., GitHub PAT `ghp_[a-zA-Z0-9]{36}`), with an integration test that writes a real `~/.claude/settings.json` and spawns the Claude Code harness. The test asserts the hook fired and the audit log gained a record.
+- **M2 — Calibration documentation.** A guide that tells the operator how to add their own regex patterns and validate them against the same harness-contract test the M1 hook ships with. The repo will not ship a curated secret list — see [Why this repo is non-composable, on purpose](#why-this-repo-is-non-composable-on-purpose).
+- **M3 — Port to one Linux distro.** Same hook, same test, on Ubuntu 24.04. Confirms the contract holds across BSD vs GNU tooling.
+- **M4 — Second hook category.** Only after M1–M3 are green.
 
-For the full list with vector / detection status / recommended response, see [`docs/known-bypasses.md`](./docs/known-bypasses.md).
+No dates. No rc tags. No `v1.0.0`.
+
+## What is actually protected today
+
+Today, nothing in this repo is protecting your machine. The 26 hooks under `archive/hooks-rc2/` are reference TypeScript implementations of patterns we intend to validate against the Claude Code harness contract — they are not currently wired up correctly. Treat the manifest as a wishlist, not a feature list.
+
+For documented detection gaps in the rc.x design (heredoc bodies, hardlink aliasing, alias-wrapped git, pipe-to-interpreter, cross-process audit-log writes) see [`docs/known-bypasses.md`](./docs/known-bypasses.md). Those gaps remain even when the delivery layer eventually works.
 
 ## Install
 
-### Channel 1: Claude Code Plugin (recommended for individual devs) - Not Published Yet (ETA 6 - May 29th, 2026)
+Installation is paused until M1 ships. The 26 hooks from rc.2 have been moved to `archive/hooks-rc2/` and are kept as reference TypeScript implementations of the patterns we intend to validate against the real Claude Code harness contract. Do not run `ccsec apply` against a real `~/.claude/settings.json` — the compiled output is not currently a valid Claude Code settings file.
 
-```
-/plugin install bitsummit/hardening
-/ccsec apply baseline
-```
+If you want to read the retired hook source, start at [`archive/hooks-rc2/`](./archive/hooks-rc2/). If you want a working binary, watch the [release feed](https://github.com/jwtor7/claude-code-governance/releases) — there will be no release until M1 lands a real harness-contract test.
 
-### Channel 2: npm (for CI use, non-plugin contexts)
+## Why this repo is non-composable, on purpose
 
-```
-npm i -g @bitsummit/claude-code-security
-ccsec apply --profile baseline
-```
+Hooks are deterministic regex matchers calibrated to the secrets, paths, and tools their operator actually uses. A hook that detects "all possible AWS keys" without knowing your tenant prefix is theater. A hook that detects `AKIA[0-9A-Z]{16}` against an audit log of your last 90 days of commits is operational security. Calibration is the work; the regex table is the artifact.
 
-### Channel 3: Raw repo (for MDM admins)
-
-```
-git clone https://github.com/Bitsummit-Corp/claude-code-governance.git
-cd claude-code-governance
-./installers/macos/install.sh --profile baseline
-```
-
-For Jamf-managed fleets, use the Configuration Profile template at `installers/macos/jamf/com.bitsummit.claude-code-security.mobileconfig.xml` together with `installers/macos/install-managed.sh` (sudo, root-owned, immutable) and `installers/macos/verify-managed.sh` (tamper detection). See [docs/deployment/mdm-jamf.md](./docs/deployment/mdm-jamf.md) for the full IT-admin workflow.
-
-For Windows (Intune) and Linux (Ansible / `.deb` / `.rpm`) deployment guides, see [installers/windows/README.md](./installers/windows/README.md) and [installers/linux/README.md](./installers/linux/README.md). Both ship as substantive guides today; the script artifacts they reference are templates pending v1.1 / v1.2.
-
-## Profile Chooser
-
-| Profile | When to use |
-| --- | --- |
-| `baseline` | Solo dev. Mostly warns. Doesn't break flow. |
-| `strict` | Team / shared infra. Tighter egress. Blocks dotfile + git-destructive ops. |
-| `regulated` | Regulated environment (healthcare, legal, public sector). Tightest egress + MDM bypass detector + agent allowlist. |
-
-Run `ccsec apply --profile <profile>` to install. Run `ccsec doctor` to verify the result. See [`docs/settings-reference.md`](./docs/settings-reference.md) for the full schema of every key.
+Therefore, this repo is reference material, not a turnkey kit. Forking, deleting hooks you do not need, and replacing the regex tables with patterns drawn from your own secret inventory is the expected workflow — not the exception. The M2 milestone exists to document that workflow. Until then, "drop in this profile and you are protected" is not a claim this repo makes.
 
 ## Documentation tracks
 
-Five tracks of documentation, all shipped in this release:
+Two tracks are useful as-is. The rest were aspirational under the rc.x line and are deferred to the M1+ rebuild.
 
-### Track 1 - Project entry point
+### Project entry point
 - This README.
 - [`SECURITY.md`](./SECURITY.md): vulnerability disclosure.
 - [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md): community norms.
-- [`CONTRIBUTING.md`](./CONTRIBUTING.md): how to set up, what kinds of contributions are welcomed, PR workflow, hook-adding procedure.
-- [`OWNERS.md`](./OWNERS.md): current maintainers, decision rights, response-time expectations.
 - [`LICENSE`](./LICENSE): MIT.
-- [`CHANGELOG.md`](./CHANGELOG.md): per-release notes.
+- [`CHANGELOG.md`](./CHANGELOG.md): per-release notes; v0.1.0 entry summarizes the reset.
 
-### Track 2 - Deployment
-- [`docs/deployment/mdm-jamf.md`](./docs/deployment/mdm-jamf.md): macOS Jamf workflow (the working reference).
-- [`installers/macos/README.md`](./installers/macos/README.md): per-user and fleet-managed install paths for macOS.
-- [`installers/macos/`](./installers/macos/): `install.sh`, `install-managed.sh`, `verify-managed.sh`, Jamf Configuration Profile template.
-- [`installers/windows/README.md`](./installers/windows/README.md): Intune deployment guide (templates pending v1.1).
-- [`installers/linux/README.md`](./installers/linux/README.md): Ansible / `.deb` / `.rpm` deployment guide (templates pending v1.2).
-
-### Track 3 - Operator reference (threat-driven)
-- [`docs/threat-model.md`](./docs/threat-model.md): full threat register (T-001 through T-018).
-- [`docs/coverage-matrix.md`](./docs/coverage-matrix.md): auto-generated threat-to-hook map. Regenerate with `pnpm gen:coverage-matrix`.
-- [`docs/hooks/<name>.md`](./docs/hooks/): one auto-generated page per hook. Regenerate with `pnpm gen:hook-docs`.
+### Reference (threat-driven, retired but readable)
+- [`docs/threat-model.md`](./docs/threat-model.md): threat register (T-001 through T-018) from the rc.x line. Useful for thinking about vectors; not currently mitigated.
 - [`docs/known-bypasses.md`](./docs/known-bypasses.md): documented detection gaps with vector / detection status / recommended response.
+- [`archive/hooks-rc2/`](./archive/hooks-rc2/): retired hook implementations, indexed in their own README.
 
-### Track 4 - Configuration reference
-- [`docs/settings-reference.md`](./docs/settings-reference.md): every settings.json key the project uses.
-- Profile chooser table (above).
-- Per-profile templates at `packages/settings/profiles/`.
+`docs/coverage-matrix.md` and `docs/hooks/<name>.md` are auto-generated artifacts from the rc.x flow. They are accurate descriptions of what the rc.x source intended to do, not of what runs today.
 
-### Track 5 - Project meta (decisions + history)
-- [`docs/adr/0001-node-implementation.md`](./docs/adr/0001-node-implementation.md): why Node TypeScript over Go.
-- [`docs/adr/0002-monorepo-layout.md`](./docs/adr/0002-monorepo-layout.md): pnpm workspaces structure.
-- [`docs/adr/0003-passive-only-posture.md`](./docs/adr/0003-passive-only-posture.md): no daemon, no auto-remediation.
-- [`docs/adr/0004-hook-contract-bumps-plan2.md`](./docs/adr/0004-hook-contract-bumps-plan2.md): hook manifest schema evolution.
-- [`docs/adr/0005-rules-package-decision.md`](./docs/adr/0005-rules-package-decision.md): markdown templates over executable rules.
-- [`docs/adr/0006-mdm-deployment-decision.md`](./docs/adr/0006-mdm-deployment-decision.md): Configuration Profile + per-OS path templates.
-- [`docs/superpowers/plans/`](./docs/superpowers/plans/): per-plan implementation sequence (Plan 1 through Plan 10).
+## Acknowledgement
+
+The four defects above were identified by an external technical reviewer running `v0.9.0-rc.2` in a real Claude Code session against a real workload. The report and proposed fixes were filed as a clean issue with passing tests. That is the discovery shape this project needs more of, and it is the reason the architecture is being reset rather than papered over with another rc. Public acknowledgement (with permission) will accompany M1 when it ships.
 
 ## License
 

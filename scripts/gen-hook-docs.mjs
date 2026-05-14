@@ -2,9 +2,15 @@
 /**
  * gen-hook-docs.mjs - Auto-generate per-hook documentation pages.
  *
- * Walks packages/hooks/src/*\/index.ts, dynamically imports each hook's
- * compiled module from packages/hooks/dist/<name>/index.js, reads its
- * manifest, and writes docs/hooks/<name>.md.
+ * v0.1.0 scope-reset note: the rc.x hook source has been moved to
+ * archive/hooks-rc2/ pending the M1 rebuild. This script still points at
+ * the archive so the historical generator command remains executable
+ * against the retired source, but it is not part of the v0.1.0 build flow
+ * and the docs it emits are reference material only.
+ *
+ * Walks archive/hooks-rc2/*\/index.ts, dynamically imports each hook's
+ * compiled module from packages/hooks/dist/<name>/index.js (when present
+ * from a prior build), reads its manifest, and writes docs/hooks/<name>.md.
  *
  * Behavior description and notes are sourced from a doc-block comment
  * in the source (lines starting with `// DOC:` or `// NOTES:`). Anything
@@ -21,7 +27,7 @@ import { dirname, join, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '..');
-const SRC_DIR = join(REPO_ROOT, 'packages/hooks/src');
+const SRC_DIR = join(REPO_ROOT, 'archive/hooks-rc2');
 const DIST_DIR = join(REPO_ROOT, 'packages/hooks/dist');
 const OUT_DIR = join(REPO_ROOT, 'docs/hooks');
 
@@ -68,7 +74,7 @@ function buildPage(manifest, doc) {
 
   return `# ${manifest.name}
 
-> Auto-generated from \`packages/hooks/src/${manifest.name}/index.ts\` manifest. Do not hand-edit. Run \`pnpm gen:hook-docs\` to regenerate.
+> Auto-generated from \`archive/hooks-rc2/${manifest.name}/index.ts\` manifest (retired rc.x source). Do not hand-edit. Run \`pnpm gen:hook-docs\` to regenerate.
 
 ## Manifest
 

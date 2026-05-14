@@ -2,9 +2,15 @@
 /**
  * gen-coverage-matrix.mjs - Auto-generate the threat-to-hook coverage matrix.
  *
- * Walks packages/hooks/src/*\/index.ts, dynamically imports each hook's
- * compiled module from packages/hooks/dist/<name>/index.js, reads its
- * manifest, groups by threat ID, and writes docs/coverage-matrix.md.
+ * v0.1.0 scope-reset note: the rc.x hook source has been moved to
+ * archive/hooks-rc2/ pending the M1 rebuild. This script still points at
+ * the archive so the historical generator command remains executable
+ * against the retired source, but it is not part of the v0.1.0 build flow.
+ *
+ * Walks archive/hooks-rc2/*\/index.ts, dynamically imports each hook's
+ * compiled module from packages/hooks/dist/<name>/index.js (when present
+ * from a prior build), reads its manifest, groups by threat ID, and writes
+ * docs/coverage-matrix.md.
  *
  * Profiles are rendered with effective severity per hook (e.g.
  * "baseline=warn, strict=block, regulated=block").
@@ -18,7 +24,7 @@ import { dirname, join, relative, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '..');
-const SRC_DIR = join(REPO_ROOT, 'packages/hooks/src');
+const SRC_DIR = join(REPO_ROOT, 'archive/hooks-rc2');
 const DIST_DIR = join(REPO_ROOT, 'packages/hooks/dist');
 const OUT_PATH = join(REPO_ROOT, 'docs/coverage-matrix.md');
 
@@ -131,7 +137,7 @@ function buildPage(manifests) {
 
   // Threat-to-test mapping.
   body += `## Threat to test map\n\n`;
-  body += `Each hook ships with a companion vitest suite at \`packages/hooks/src/<name>/<name>.test.ts\`. The cases counted below are top-of-line \`it()\` / \`test()\` invocations; assertions inside helpers are not counted.\n\n`;
+  body += `Each hook ships with a companion vitest suite at \`archive/hooks-rc2/<name>/<name>.test.ts\` (retired rc.x source). The cases counted below are top-of-line \`it()\` / \`test()\` invocations; assertions inside helpers are not counted.\n\n`;
   body += `| Threat | Hook | Tests | Cases |\n| --- | --- | --- | --- |\n`;
   let totalCases = 0;
   let hooksWithTests = 0;
